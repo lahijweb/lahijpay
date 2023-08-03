@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\PaymentController;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -13,4 +15,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {});
+Route::get('/', [PaymentController::class, 'index'])->name('payment.index');
+Route::post('/', [PaymentController::class, 'store'])->name('payment.store');
+Route::any('callback/{uuid}', [PaymentController::class, 'verify'])->name('payment.verify')->withoutMiddleware(VerifyCsrfToken::class);
+Route::get('/callback', [PaymentController::class, 'callback'])->name('payment.callback');
