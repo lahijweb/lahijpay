@@ -49,4 +49,12 @@ class StorePaymentRequest extends FormRequest
             'driver' => 'درگاه',
         ];
     }
+
+    protected function prepareForValidation(): void
+    {
+        $this->merge([
+            'amount' => str_replace(',', '', $this->amount),
+        ]);
+    }
+
 }

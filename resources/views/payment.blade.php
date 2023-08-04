@@ -55,7 +55,7 @@
                                         <!--begin::Col-->
                                         <div class="col-md-6 fv-row">
                                             <!--begin::Label-->
-                                            <label class=" fs-5 mb-2">نام</label>
+                                            <label class="required fs-5 mb-2">نام</label>
                                             <!--end::Label-->
                                             <!--begin::Input-->
                                             <input type="text" class="form-control bg-transparent" placeholder="نام" name="first_name" value="{{old('first_name')}}">
@@ -90,7 +90,7 @@
                                     <div class="fv-row mb-6">
                                         <label class="required fs-5 mb-2">مبلغ</label>
                                         <div class="input-group mb-5">
-                                            <input type="text" name="amount" class="form-control" placeholder="مبلغ پرداختی به ریال" value="{{old('amount')}}" required />
+                                            <input type="text" id="amount" name="amount" class="form-control" placeholder="مبلغ پرداختی به ریال" value="{{old('amount')}}" required />
                                             <span class="input-group-text">ریال</span>
                                         </div>
                                     </div>
@@ -143,3 +143,12 @@
         </div>
     </body>
 @endsection
+@push('footerjs')
+    <script>
+        Inputmask("numeric", {
+            groupSeparator: ',',
+            autoGroup: true,
+            "rightAlignNumerics": true
+        }).mask("#amount");
+    </script>
+@endpush
