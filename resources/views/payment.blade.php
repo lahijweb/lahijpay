@@ -106,7 +106,8 @@
                                                 <!--begin::Col-->
                                                 <div class="col">
                                                     <!--begin::Option-->
-                                                    <input type="radio" class="btn-check" name="driver" value="{{$driver->driver}}" id="{{$driver->driver}}" @if($driver->is_default) checked="checked" @endif>
+                                                    <input type="radio" required class="btn-check" name="driver" value="{{$driver->driver}}" id="{{$driver->driver}}" {{ old('driver') == $driver->driver ? 'checked' : (old('driver') == null && $driver->is_default ? 'checked' : '') }}
+                                                    >
                                                     <label class="btn btn-outline btn-outline-dashed btn-active-light-primary p-7 d-flex flex-column flex-center gap-5 h-100" for="{{$driver->driver}}">
                                                         <!--begin::Label-->
                                                         <div class="fs-5 fw-bold">{{$driver->name}}</div>
@@ -148,7 +149,6 @@
         Inputmask("numeric", {
             groupSeparator: ',',
             autoGroup: true,
-            "rightAlignNumerics": true
         }).mask("#amount");
     </script>
 @endpush
