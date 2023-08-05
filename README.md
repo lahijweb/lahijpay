@@ -8,9 +8,9 @@ Online payment script
 ```bash
   cp .env.example .env
 
-  php artisan key:generate
-
   composer install
+  
+  php artisan key:generate
 ```
 
 * Create lahijpay database
