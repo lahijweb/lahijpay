@@ -16,6 +16,8 @@ class Gateway extends Model
     ];
 
     protected $casts = [
-        'config' => 'encrypted:array'
+        'config' => 'encrypted:array',
+        'is_default' => 'boolean',
+        'is_active' => 'boolean'
     ];
 }
