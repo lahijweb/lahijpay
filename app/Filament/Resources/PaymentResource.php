@@ -24,7 +24,7 @@ class PaymentResource extends Resource
     protected static ?string $pluralLabel = 'پرداخت‌ها';
     protected static ?string $modelLabel = 'پرداخت‌';
     protected static ?int $navigationSort = 1;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     public static function form(Form $form): Form
     {
@@ -120,7 +120,9 @@ class PaymentResource extends Resource
             ])
             ->bulkActions([
                 //
-            ]);
+            ])
+            ->emptyStateHeading('پرداختی یافت نشد!')
+            ->emptyStateIcon('heroicon-o-banknotes');
     }
 
     public static function getRelations(): array
