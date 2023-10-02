@@ -50,18 +50,22 @@ class PaymentResource extends Resource
                 TextColumn::make('first_name')
                     ->searchable()
                     ->toggleable()
+                    ->default('-')
                     ->label('نام'),
                 TextColumn::make('last_name')
                     ->searchable()
                     ->toggleable()
+                    ->default('-')
                     ->label('نام خانوادگی'),
                 TextColumn::make('email')
                     ->searchable()
                     ->toggleable()
+                    ->default('-')
                     ->label('ایمیل'),
                 TextColumn::make('mobile')
                     ->searchable()
                     ->toggleable()
+                    ->default('-')
                     ->label('موبایل'),
                 TextColumn::make('gateway.name')
                     ->searchable()
