@@ -41,6 +41,7 @@ class PaymentResource extends Resource
                 TextColumn::make('id')
                     ->searchable()
                     ->toggleable()
+                    ->sortable()
                     ->label('شناسه'),
                 TextColumn::make('uuid')
                     ->searchable()
@@ -125,6 +126,7 @@ class PaymentResource extends Resource
             ->bulkActions([
                 //
             ])
+            ->defaultSort('id', 'desc')
             ->emptyStateHeading('پرداختی یافت نشد!')
             ->emptyStateIcon('heroicon-o-banknotes');
     }
