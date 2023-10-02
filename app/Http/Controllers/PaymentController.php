@@ -48,7 +48,7 @@ class PaymentController extends Controller
         $transactionInfo = Payment::where('uuid', $uuid)->first();
         if(is_null($transactionInfo))
             return Redirect::route('payment.callback')->withErrors(__('message.transaction_not_found'));
-        if($transactionInfo->status != PaymentStatusEnum::PENDING)
+        if($transactionInfo->status != PaymentStatusEnum::Pending)
             return Redirect::route('payment.callback')->withErrors(__('message.transaction_not_pending'));
         $transaction_id = $transactionInfo->transactionid;
         $gatewayInfo = Gateway::find($transactionInfo->gateway_id);
@@ -61,7 +61,7 @@ class PaymentController extends Controller
                 ->transactionId($transaction_id)->verify();
             $referenceId = $receipt->getReferenceId();
             $transactionInfo->referenceid = $referenceId;
-            $transactionInfo->status = PaymentStatusEnum::ACCEPTED;
+            $transactionInfo->status = PaymentStatusEnum::Accepted;
             $transactionInfo->verified_at = now();
             $transactionInfo->save();
             $message = [
@@ -73,7 +73,7 @@ class PaymentController extends Controller
             ];
             return Redirect::route('payment.callback')->with('message', $message);
         } catch (InvalidPaymentException $exception) {
-            $transactionInfo->status = PaymentStatusEnum::REJECTED;
+            $transactionInfo->status = PaymentStatusEnum::Rejected;
             $transactionInfo->save();
             $errorMessage = $exception->getMessage();
             $message = [
