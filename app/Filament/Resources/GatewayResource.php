@@ -5,36 +5,43 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\GatewayResource\Pages;
 use App\Filament\Resources\GatewayResource\RelationManagers;
 use App\Models\Gateway;
-use Filament\Forms;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Table;
+use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\KeyValue;
+use Filament\Forms\Components\Toggle;
+use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ToggleColumn;
 
 class GatewayResource extends Resource
 {
     protected static ?string $model = Gateway::class;
-    protected static ?string $pluralLabel = 'درگاه';
+    protected static ?string $pluralLabel = 'درگاه‌ها';
     protected static ?string $modelLabel = 'درگاه';
-
+    protected static ?int $navigationSort = 2;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
         return $form
             ->schema([
-                Forms\Components\TextInput::make('name')
+                TextInput::make('name')
                     ->label('نام')
                     ->disabledOn('edit'),
-                Forms\Components\KeyValue::make('config')
+                TextInput::make('driver')
+                    ->label('درایور')
+                    ->disabledOn('edit'),
+                Toggle::make('is_default')
+                    ->label('پیشفرض'),
+                Toggle::make('is_active')
+                    ->label('فعال'),
+                KeyValue::make('config')
                     ->label('تنظیمات')
                     ->addable(false)
                     ->deletable(false)
                     ->editableKeys(false),
-                Forms\Components\Toggle::make('is_default')
-                    ->label('پیشفرض'),
-                Forms\Components\Toggle::make('is_active')
-                    ->label('فعال')
             ]);
     }
 
@@ -42,16 +49,19 @@ class GatewayResource extends Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
+                TextColumn::make('id')
                     ->searchable()
                     ->sortable('desc')
                     ->label('شناسه'),
-                Tables\Columns\TextColumn::make('name')
+                TextColumn::make('driver')
+                    ->searchable()
+                    ->label('درایور'),
+                TextColumn::make('name')
                     ->searchable()
                     ->label('نام'),
-                Tables\Columns\ToggleColumn::make('is_default')
+                ToggleColumn::make('is_default')
                     ->label('پیشفرض'),
-                Tables\Columns\ToggleColumn::make('is_active')
+                ToggleColumn::make('is_active')
                     ->label('فعال'),
             ])
             ->filters([
@@ -61,7 +71,7 @@ class GatewayResource extends Resource
                 Tables\Actions\EditAction::make(),
             ])
             ->bulkActions([
-
+                //
             ]);
     }
 
