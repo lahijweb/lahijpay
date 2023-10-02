@@ -157,7 +157,7 @@ return [
             'merchantId' => '',
             'terminalCode' => '',
             'certificate' => '', // can be string (and set certificateType to xml_string) or an xml file path (and set cetificateType to xml_file)
-            'certificateType' => 'xml_file', // can be: xml_file, xml_string
+            'certificateType' => 'xml_string', // can be: xml_file, xml_string
             'callbackUrl' => 'http://yoursite.com/path/to',
             'currency' => 'R', //Can be R, T (Rial, Toman)
         ],
@@ -165,7 +165,7 @@ return [
             'apiPurchaseUrl' => 'https://pay.ir/pg/send',
             'apiPaymentUrl' => 'https://pay.ir/pg/',
             'apiVerificationUrl' => 'https://pay.ir/pg/verify',
-            'merchantId' => 'test', // set it to `test` for test environments
+            'merchantId' => '', // set it to `test` for test environments
             'callbackUrl' => 'http://yoursite.com/path/to',
             'description' => 'payment using payir',
             'currency' => 'R', //Can be R, T (Rial, Toman)
