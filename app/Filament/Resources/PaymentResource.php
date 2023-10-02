@@ -40,35 +40,45 @@ class PaymentResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->searchable()
+                    ->toggleable()
                     ->label('شناسه'),
                 TextColumn::make('uuid')
                     ->searchable()
                     ->limit(5)
+                    ->toggleable()
                     ->label('UUID'),
                 TextColumn::make('first_name')
                     ->searchable()
+                    ->toggleable()
                     ->label('نام'),
                 TextColumn::make('last_name')
                     ->searchable()
+                    ->toggleable()
                     ->label('نام خانوادگی'),
                 TextColumn::make('email')
                     ->searchable()
+                    ->toggleable()
                     ->label('ایمیل'),
                 TextColumn::make('mobile')
                     ->searchable()
+                    ->toggleable()
                     ->label('موبایل'),
                 TextColumn::make('gateway.name')
                     ->searchable()
+                    ->toggleable()
                     ->label('درگاه'),
                 TextColumn::make('amount')
                     ->searchable()
+                    ->toggleable()
                     ->money('IRR')
                     ->label('مبلغ'),
                 TextColumn::make('status')
                     ->searchable()
+                    ->toggleable()
                     ->badge()
                     ->label('وضعیت'),
                 TextColumn::make('created_at')
+                    ->toggleable()
                     ->jalaliDateTime()
                     ->label('تاریخ ثبت'),
             ])
