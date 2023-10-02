@@ -18,10 +18,6 @@ class Payment extends Model
     ];
 
     protected $casts = [
-        'first_name' => 'encrypted',
-        'last_name' => 'encrypted',
-        'email' => 'encrypted',
-        'mobile' => 'encrypted',
         'status' => PaymentStatusEnum::class,
     ];
 
