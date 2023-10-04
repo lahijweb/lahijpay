@@ -65,11 +65,12 @@ class PaymentController extends Controller
             $transactionInfo->verified_at = now();
             $transactionInfo->save();
             $message = [
-                'status' => 'success',
+                'status' => '200',
+                'statusText' => 'موفق',
                 'message' => __('message.transaction_verified'),
-                'uuid' => $transactionInfo,
+                'uuid' => $uuid,
                 'transactionId' => $transaction_id,
-                'referenceid' => $referenceId,
+                'referenceId' => $referenceId,
             ];
             return Redirect::route('payment.callback')->with('message', $message);
         } catch (InvalidPaymentException $exception) {
@@ -77,10 +78,11 @@ class PaymentController extends Controller
             $transactionInfo->save();
             $errorMessage = $exception->getMessage();
             $message = [
-                'status' => 'error',
+                'status' => '402',
+                'statusText' => 'خطا',
                 'message' => __('message.transaction_not_verified'),
                 'error' => $errorMessage,
-                'uuid' => $transactionInfo,
+                'uuid' => $uuid,
                 'transactionId' => $transaction_id,
             ];
             return Redirect::route('payment.callback')->with('message', $message);
