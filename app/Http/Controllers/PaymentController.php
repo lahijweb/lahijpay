@@ -16,7 +16,7 @@ class PaymentController extends Controller
     public function index()
     {
         $drivers = Gateway::where('is_active', true)->get();
-        return view('payment', compact('drivers'));
+        return view('payment.payment', compact('drivers'));
     }
 
     public function store(StorePaymentRequest $request)
@@ -89,7 +89,7 @@ class PaymentController extends Controller
 
     public function callback()
     {
-        return view('callback');
+        return view('payment.callback');
     }
 
 }
