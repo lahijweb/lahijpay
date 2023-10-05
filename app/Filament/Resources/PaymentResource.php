@@ -7,6 +7,7 @@ use App\Filament\Resources\PaymentResource\Pages;
 use App\Filament\Resources\PaymentResource\RelationManagers;
 use App\Models\Payment;
 use Filament\Forms\Form;
+use Filament\Infolists\Components\Section;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -150,21 +151,31 @@ class PaymentResource extends Resource
     {
         return $infolist
             ->schema([
-                TextEntry::make('id')->label('شناسه'),
-                TextEntry::make('uuid')->label('UUID'),
-                TextEntry::make('first_name')->label('نام'),
-                TextEntry::make('last_name')->label('نام خانوادگی')->default('-'),
-                TextEntry::make('email')->label('ایمیل')->default('-'),
-                TextEntry::make('mobile')->label('موبایل')->default('-'),
-                TextEntry::make('description')->label('توضیحات')->default('-'),
-                TextEntry::make('gateway.name')->label('درگاه'),
-                TextEntry::make('amount')->money('IRR')->label('مبلغ'),
-                TextEntry::make('status')->label('وضعیت'),
-                TextEntry::make('transactionid')->label('شناسه تراکنش')->default('-'),
-                TextEntry::make('referenceid')->label('شناسه مرجع')->default('-'),
-                TextEntry::make('created_at')->label('تاریخ ثبت')->jalaliDateTime(),
-                TextEntry::make('verified_at')->label('تاریخ تایید')->jalaliDateTime(),
-                TextEntry::make('updated_at')->label('آخرین بروزرسانی')->jalaliDateTime(),
+                Section::make('اطلاعات پرداخت')
+                    ->icon('heroicon-o-banknotes')
+                    ->schema([
+                        TextEntry::make('id')->label('شناسه'),
+                        TextEntry::make('uuid')->label('UUID'),
+                        TextEntry::make('gateway.name')->label('درگاه'),
+                        TextEntry::make('amount')->money('IRR')->label('مبلغ'),
+                        TextEntry::make('status')->label('وضعیت'),
+                        TextEntry::make('transactionid')->label('شناسه تراکنش')->default('-'),
+                        TextEntry::make('referenceid')->label('شناسه مرجع')->default('-'),
+                        TextEntry::make('created_at')->label('تاریخ ثبت')->jalaliDateTime(),
+                        TextEntry::make('verified_at')->label('تاریخ تایید')->jalaliDateTime(),
+                        TextEntry::make('updated_at')->label('آخرین بروزرسانی')->jalaliDateTime(),
+                    ])->columns(3)
+                    ->collapsible(),
+                Section::make('اطلاعات پرداخت کننده')
+                    ->icon('heroicon-m-user')
+                    ->schema([
+                        TextEntry::make('first_name')->label('نام'),
+                        TextEntry::make('last_name')->label('نام خانوادگی')->default('-'),
+                        TextEntry::make('email')->label('ایمیل')->default('-'),
+                        TextEntry::make('mobile')->label('موبایل')->default('-'),
+                        TextEntry::make('description')->label('توضیحات')->default('-'),
+                    ])->columns(3)
+                    ->collapsible(),
             ]);
     }
 }

@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\GatewayResource\Pages;
 use App\Filament\Resources\GatewayResource\RelationManagers;
 use App\Models\Gateway;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
 use Filament\Tables;
@@ -27,21 +28,24 @@ class GatewayResource extends Resource
     {
         return $form
             ->schema([
-                TextInput::make('name')
-                    ->label('نام')
-                    ->disabledOn('edit'),
-                TextInput::make('driver')
-                    ->label('درایور')
-                    ->disabledOn('edit'),
-                Toggle::make('is_default')
-                    ->label('پیشفرض'),
-                Toggle::make('is_active')
-                    ->label('فعال'),
-                KeyValue::make('config')
-                    ->label('تنظیمات')
-                    ->addable(false)
-                    ->deletable(false)
-                    ->editableKeys(false),
+                Section::make()
+                    ->schema([
+                        TextInput::make('name')
+                            ->label('نام')
+                            ->disabledOn('edit'),
+                        TextInput::make('driver')
+                            ->label('درایور')
+                            ->disabledOn('edit'),
+                        Toggle::make('is_default')
+                            ->label('پیشفرض'),
+                        Toggle::make('is_active')
+                            ->label('فعال'),
+                        KeyValue::make('config')
+                            ->label('تنظیمات')
+                            ->addable(false)
+                            ->deletable(false)
+                            ->editableKeys(false),
+                    ])->columns(2)
             ]);
     }
 
