@@ -24,6 +24,7 @@ class PaymentResource extends Resource
     protected static ?string $model = Payment::class;
     protected static ?string $pluralLabel = 'پرداخت‌ها';
     protected static ?string $modelLabel = 'پرداخت‌';
+    protected static ?string $navigationGroup = 'گزارش‌ها';
     protected static ?int $navigationSort = 1;
     protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
