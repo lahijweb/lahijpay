@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->boolean('is_active')->default(true);
+            $table->boolean('is_scheduled')->default(false);
             $table->integer('max_uses')->nullable();
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();

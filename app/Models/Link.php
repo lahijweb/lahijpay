@@ -4,10 +4,11 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Link extends Model
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     protected $table = 'links';
 
@@ -16,6 +17,7 @@ class Link extends Model
         'title',
         'description',
         'is_active',
+        'is_scheduled',
         'max_uses',
         'start_date',
         'end_date',
