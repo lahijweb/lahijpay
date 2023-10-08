@@ -70,10 +70,12 @@ class LinkResource extends Resource
                         DateTimePicker::make('start_date')
                             ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
                             ->required(fn (Get $get): bool => filled($get('is_scheduled')))
+                            ->placeholder('اعتبار لینک از تاریخ')
                             ->label('اعتبار لینک از تاریخ'),
                         DateTimePicker::make('end_date')
                             ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
                             ->required(fn (Get $get): bool => filled($get('is_scheduled')))
+                            ->placeholder('اعتبار لینک تا تاریخ')
                             ->label('اعتبار لینک تا تاریخ'),
                     ])->columns(2)
             ]);
