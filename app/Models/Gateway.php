@@ -41,4 +41,10 @@ class Gateway extends Model
     {
         $query->where('id', '<>', $id);
     }
+
+    public function scopeActive(Builder $query): Builder
+    {
+        return $query->where('is_active', true);
+    }
+
 }
