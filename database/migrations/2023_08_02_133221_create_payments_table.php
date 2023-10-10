@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('payments', function (Blueprint $table) {
             $table->id();
             $table->uuid()->unique();
+            $table->nullableMorphs('payable');
             $table->foreignId('gateway_id')->constrained()->cascadeOnUpdate();
             $table->decimal('amount', 24, 4)->default(0.0000);
             $table->string('first_name')->nullable();

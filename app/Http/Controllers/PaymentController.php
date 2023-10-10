@@ -32,6 +32,8 @@ class PaymentController extends Controller
             ->purchase($invoice, function ($driver, $transactionId) use ($invoice, $request, $gatewayInfo) {
                 Payment::create([
                     'uuid' => $invoice->getUuid(),
+                    'payable_type' => 'App\\Models\\Payment',
+                    'payable_id' => null,
                     'first_name' => $request->first_name,
                     'last_name' => $request->last_name,
                     'email' => $request->email,

@@ -17,7 +17,7 @@
                             <p class="card-text">{{ $link->description }}</p>
                         </div>
                         <div class="card-body">
-                            <form method="post" class="form w-100" action="{{route('payment.store')}}">
+                            <form method="post" class="form w-100" action="{{ route('link.store', $link->slug) }}">
                                 @csrf
                                 <div class="mb-4">
                                     <label class="form-label">نام</label>

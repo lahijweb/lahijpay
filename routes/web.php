@@ -22,3 +22,4 @@ Route::any('callback/{uuid}', [PaymentController::class, 'verify'])->name('payme
 Route::get('/callback', [PaymentController::class, 'callback'])->name('payment.callback');
 
 Route::get('/link/{link}', [LinkController::class, 'index'])->name('link.index');
+Route::post('/link/{slug}', [LinkController::class, 'store'])->name('link.store');

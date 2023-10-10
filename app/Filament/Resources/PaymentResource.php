@@ -2,7 +2,10 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\PayableTypeEnum;
 use App\Enums\PaymentStatusEnum;
+use App\Filament\Resources\LinkResource\RelationManagers\LinkRelationManager;
+use App\Filament\Resources\LinkResource\RelationManagers\LinksRelationManager;
 use App\Filament\Resources\PaymentResource\Pages;
 use App\Filament\Resources\PaymentResource\RelationManagers;
 use App\Models\Payment;
@@ -50,6 +53,10 @@ class PaymentResource extends Resource
                     ->limit(5)
                     ->toggleable()
                     ->label('UUID'),
+                TextColumn::make('payable_type')
+                    ->toggleable()
+                    ->default('-')
+                    ->label('نوع'),
                 TextColumn::make('first_name')
                     ->searchable()
                     ->toggleable()
@@ -101,6 +108,11 @@ class PaymentResource extends Resource
                     ->relationship('gateway', 'name')
                     ->preload()
                     ->label('درگاه'),
+                SelectFilter::make('payable_type')
+                    ->multiple()
+                    ->searchable()
+                    ->options(PayableTypeEnum::class)
+                    ->label('نوع'),
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from')
@@ -176,6 +188,15 @@ class PaymentResource extends Resource
                         TextEntry::make('mobile')->label('موبایل')->default('-'),
                         TextEntry::make('description')->label('توضیحات')->default('-'),
                     ])->columns(3)
+                    ->collapsible(),
+                Section::make('اطلاعات مرتبط')
+                    ->icon('heroicon-m-link')
+                    ->schema([
+                        TextEntry::make('payable_type')->label('نوع'),
+                        TextEntry::make('payable.id')->label('شناسه'),
+                        TextEntry::make('payable.title')->label('عنوان')
+                    ])->columns(3)
+                    ->hidden(fn($record) => is_null($record->payable_id))
                     ->collapsible(),
             ]);
     }
