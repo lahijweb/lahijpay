@@ -21,6 +21,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Forms\Components\DatePicker;
 use Filament\Tables\Filters\Filter;
 use Filament\Infolists\Components\TextEntry;
+use Illuminate\Database\Eloquent\Model;
 
 class PaymentResource extends Resource
 {
@@ -199,5 +200,24 @@ class PaymentResource extends Resource
                     ->hidden(fn($record) => is_null($record->payable_id))
                     ->collapsible(),
             ]);
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return ['uuid', 'transactionid', 'referenceid' ,'first_name', 'last_name', 'email', 'mobile'];
+    }
+
+    public static function getGlobalSearchResultTitle(Model $record): string
+    {
+        return $record->first_name.' '.$record->last_name;
+    }
+
+    public static function getGlobalSearchResultDetails(Model $record): array
+    {
+        return [
+            'پرداخت کننده' => $record->first_name.' '.$record->last_name,
+            'ایمیل' => $record->email,
+            'موبایل' => $record->mobile,
+        ];
     }
 }

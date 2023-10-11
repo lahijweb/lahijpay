@@ -31,6 +31,7 @@ class AdminPanelProvider extends PanelProvider
             ->profile()
             ->passwordReset()
             ->sidebarCollapsibleOnDesktop()
+            ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->colors([
                 'primary' => Color::Teal,
             ])
