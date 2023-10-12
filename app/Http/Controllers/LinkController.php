@@ -2,14 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StorePaymentRequest;
+use App\Http\Requests\StoreLinkRequest;
 use App\Models\Gateway;
 use App\Models\Link;
-use App\Models\Payment;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Redirect;
-use Shetabit\Multipay\Invoice;
-use Shetabit\Payment\Facade\Payment as Driver;
+use App\Services\PaymentService;
 
 class LinkController extends Controller
 {
@@ -52,27 +48,19 @@ class LinkController extends Controller
         return view('link.link', compact(['drivers', 'link']));
     }
 
-    public function store(StorePaymentRequest $request, Link $slug)
+    public function store(StoreLinkRequest $request, Link $slug)
     {
-        $gatewayInfo = Gateway::where('driver', $request->driver)->first();
-        if (is_null($gatewayInfo))
-            return Redirect::route('link.index')->withErrors(__('message.gateway_invalid'));
-        $invoice = new Invoice();
-        $invoice->amount($request->amount);
-        return Driver::via($request->driver)
-            ->config($gatewayInfo->config)
-            ->callbackUrl(url('/callback/' . $invoice->getUuid()))
-            ->purchase($invoice, function ($driver, $transactionId) use ($invoice, $request, $gatewayInfo, $slug) {
-                $slug->payments()->create([
-                    'uuid' => $invoice->getUuid(),
-                    'first_name' => $request->first_name,
-                    'last_name' => $request->last_name,
-                    'email' => $request->email,
-                    'mobile' => $request->mobile,
-                    'amount' => $request->amount,
-                    'gateway_id' => $gatewayInfo->id,
-                    'transactionid' => $transactionId
-                ]);
-            })->pay()->render();
+        $paymentService = new PaymentService();
+        $data = [
+            'driver' => $request->driver,
+            'payable_type' => get_class($slug),
+            'payable_id' => $slug->id,
+            'first_name' => $request->first_name,
+            'last_name' => $request->last_name,
+            'email' => $request->email,
+            'mobile' => $request->mobile,
+            'amount' => $request->amount,
+        ];
+        return $paymentService->store((object)$data);
     }
 }
