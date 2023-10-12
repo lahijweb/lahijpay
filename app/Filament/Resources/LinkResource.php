@@ -12,6 +12,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -29,7 +31,7 @@ class LinkResource extends Resource
     protected static ?string $navigationGroup = 'ابزارها';
     protected static ?int $navigationSort = 2;
 
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
+    protected static ?string $navigationIcon = 'heroicon-o-link';
 
     public static function form(Form $form): Form
     {
@@ -70,12 +72,12 @@ class LinkResource extends Resource
                             ->live(),
                         DateTimePicker::make('start_date')
                             ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
-                            ->required(fn (Get $get): bool => filled($get('is_scheduled')))
+                            ->required(fn(Get $get): bool => filled($get('is_scheduled')))
                             ->placeholder('اعتبار لینک از تاریخ')
                             ->label('اعتبار لینک از تاریخ'),
                         DateTimePicker::make('end_date')
                             ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
-                            ->required(fn (Get $get): bool => filled($get('is_scheduled')))
+                            ->required(fn(Get $get): bool => filled($get('is_scheduled')))
                             ->placeholder('اعتبار لینک تا تاریخ')
                             ->label('اعتبار لینک تا تاریخ'),
                     ])->columns(2)
@@ -102,6 +104,7 @@ class LinkResource extends Resource
                 Tables\Filters\TrashedFilter::make(),
             ])
             ->actions([
+                Tables\Actions\ViewAction::make(),
                 Tables\Actions\EditAction::make(),
                 Tables\Actions\RestoreAction::make(),
             ])
@@ -118,7 +121,7 @@ class LinkResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\PaymentsRelationManager::class,
         ];
     }
 
@@ -127,9 +130,11 @@ class LinkResource extends Resource
         return [
             'index' => Pages\ListLinks::route('/'),
             'create' => Pages\CreateLink::route('/create'),
+            'view' => Pages\ViewLink::route('/{record}'),
             'edit' => Pages\EditLink::route('/{record}/edit'),
         ];
     }
+
 
     public static function getEloquentQuery(): Builder
     {
