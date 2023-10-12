@@ -38,7 +38,15 @@ class LinkController extends Controller
             }
         }
         if ($link->max_uses) {
-            // todo max use
+            $used = $link->payments()->accepted()->count();
+            if ($used >= $link->max_uses) {
+                $message = [
+                    'status' => '402',
+                    'statusText' => 'خطا',
+                    'message' => __('message.link_max_uses_error'),
+                ];
+                return view('error')->with('message', $message);
+            }
         }
         $drivers = Gateway::active()->get();
         return view('link.link', compact(['drivers', 'link']));

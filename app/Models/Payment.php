@@ -32,4 +32,9 @@ class Payment extends Model
     {
         return $this->morphTo()->withTrashed();
     }
+
+    public function scopeAccepted($query)
+    {
+        return $query->where('status', PaymentStatusEnum::Accepted);
+    }
 }
