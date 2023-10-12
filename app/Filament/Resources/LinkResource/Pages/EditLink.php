@@ -17,4 +17,11 @@ class EditLink extends EditRecord
             Actions\ViewAction::make(),
         ];
     }
+
+    public function getRelationManagers(): array
+    {
+        return [
+            //
+        ];
+    }
 }
