@@ -19,6 +19,7 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->boolean('is_scheduled')->default(false);
             $table->integer('max_uses')->nullable();
+            $table->decimal('amount', 24, 4)->nullable();
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();
             $table->softDeletes();

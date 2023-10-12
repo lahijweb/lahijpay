@@ -46,6 +46,7 @@ class LinkResource extends Resource
                         TextInput::make('description')
                             ->required()
                             ->placeholder('توضیحات لینک')
+                            ->columnSpan(2)
                             ->label('توضیحات'),
                         TextInput::make('slug')
                             ->required()
@@ -58,9 +59,16 @@ class LinkResource extends Resource
                         TextInput::make('max_uses')
                             ->numeric()
                             ->inputMode('numeric')
-                            ->helperText('حداکثر تعداد پرداخت با استفاده از این لینک، برای استفاده نامحدود فیلد خالی باشد')
+                            ->helperText('حداکثر تعداد پرداخت با استفاده از این لینک، برای استفاده نامحدود فیلد خالی باشد.')
                             ->placeholder('حداکثر تعداد استفاده')
                             ->label('حداکثر تعداد استفاده'),
+                        TextInput::make('amount')
+                            ->numeric('integer')
+                            ->inputMode('numeric')
+                            ->helperText('با مشخص کردن مبلغ، پرداخت کننده امکان پرداخت مبلغ دلخواه را نخواهد داشت. برای پرداخت بدون محدودیت مبلغ، فیلد خالی باشد.')
+                            ->placeholder('مبلغ')
+                            ->suffix('ریال')
+                            ->label('مبلغ ثابت'),
                         Toggle::make('is_active')
                             ->inline(false)
                             ->default(true)
@@ -80,7 +88,7 @@ class LinkResource extends Resource
                             ->required(fn(Get $get): bool => filled($get('is_scheduled')))
                             ->placeholder('اعتبار لینک تا تاریخ')
                             ->label('اعتبار لینک تا تاریخ'),
-                    ])->columns(2)
+                    ])->columns(3)
             ]);
     }
 

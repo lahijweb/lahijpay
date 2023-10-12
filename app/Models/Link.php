@@ -20,6 +20,7 @@ class Link extends Model
         'is_active',
         'is_scheduled',
         'max_uses',
+        'amount',
         'start_date',
         'end_date',
     ];

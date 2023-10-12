@@ -40,7 +40,7 @@
                                         <label class="form-label">مبلغ</label>
                                     </div>
                                     <div class="input-group mb-3">
-                                        <input type="number" pattern="[0-9]*" step="1" inputmode="numeric" min="10000" name="amount" class="form-control" placeholder="مبلغ به ریال" value="{{ old('amount') }}" aria-label="مبلغ" required>
+                                        <input type="number" pattern="[0-9]*" step="1" inputmode="numeric" min="10000" name="amount" @readonly($link->amount != null) class="form-control" placeholder="مبلغ به ریال" value="{{ old('amount', (int) $link->amount) }}" aria-label="مبلغ" required>
                                         <span class="input-group-text">ریال</span>
                                     </div>
                                 </div>

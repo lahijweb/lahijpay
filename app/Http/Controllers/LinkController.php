@@ -59,7 +59,7 @@ class LinkController extends Controller
             'last_name' => $request->last_name,
             'email' => $request->email,
             'mobile' => $request->mobile,
-            'amount' => $request->amount,
+            'amount' => $slug->amount ?? $request->amount,
         ];
         return $paymentService->store((object)$data);
     }
