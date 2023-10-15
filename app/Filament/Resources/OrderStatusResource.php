@@ -17,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class OrderStatusResource extends Resource
@@ -44,8 +45,7 @@ class OrderStatusResource extends Resource
                         Toggle::make('is_active')
                             ->default(true)
                             ->label('فعال'),
-                    ])->columns(2)
-                    ->disabled(fn($record) => $record->is_primary),
+                    ])->columns(2),
             ]);
     }
 
@@ -90,5 +90,10 @@ class OrderStatusResource extends Resource
             'create' => Pages\CreateOrderStatus::route('/create'),
             'edit' => Pages\EditOrderStatus::route('/{record}/edit'),
         ];
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        return $record->is_primary === false;
     }
 }
