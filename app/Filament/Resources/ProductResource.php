@@ -8,6 +8,7 @@ use App\Filament\Resources\ProductResource\Pages;
 use App\Filament\Resources\ProductResource\RelationManagers;
 use App\Models\Product;
 use Filament\Forms;
+use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\TextInput;
@@ -18,6 +19,8 @@ use Filament\Forms\Get;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -113,20 +116,29 @@ class ProductResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->searchable()
+                    ->toggleable()
                     ->sortable('desc')
                     ->label('شناسه'),
                 TextColumn::make('sku')
                     ->searchable()
+                    ->toggleable()
                     ->label('sku'),
                 TextColumn::make('slug')
                     ->searchable()
                     ->copyable()
+                    ->toggleable()
                     ->label('slug'),
                 TextColumn::make('title')
                     ->searchable()
+                    ->toggleable()
                     ->label('عنوان'),
+                TextColumn::make('type')
+                    ->searchable()
+                    ->toggleable()
+                    ->label('نوع'),
                 TextColumn::make('qty')
                     ->default('نامحدود')
+                    ->toggleable()
                     ->label('موجودی'),
                 TextColumn::make('status')
                     ->searchable()
@@ -136,6 +148,36 @@ class ProductResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
+                SelectFilter::make('status')
+                    ->multiple()
+                    ->searchable()
+                    ->options(ProductStatusEnum::class)
+                    ->label('وضعیت'),
+                SelectFilter::make('type')
+                    ->multiple()
+                    ->searchable()
+                    ->options(ProductTypeEnum::class)
+                    ->label('نوع محصول'),
+                Filter::make('created_at')
+                    ->form([
+                        DatePicker::make('created_from')
+                            ->label('از تاریخ')
+                            ->jalali(),
+                        DatePicker::make('created_until')
+                            ->label('تا تاریخ')
+                            ->jalali(),
+                    ])
+                    ->query(function (Builder $query, array $data): Builder {
+                        return $query
+                            ->when(
+                                $data['created_from'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '>=', $date),
+                            )
+                            ->when(
+                                $data['created_until'],
+                                fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
+                            );
+                    }),
             ])
             ->actions([
                 Tables\Actions\ViewAction::make(),
