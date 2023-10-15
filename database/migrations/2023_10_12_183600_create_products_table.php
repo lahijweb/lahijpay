@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('title');
             $table->string('description');
             $table->decimal('price', 24, 4);
-            $table->integer('sold_qty')->default(0);
+            $table->integer('qty')->nullable();
             $table->enum('type', ['physical', 'digital'])->default('digital');
             $table->enum('status', ['draft', 'published', 'unpublished', 'archived'])->default('draft');
             $table->boolean('is_active')->default(true);

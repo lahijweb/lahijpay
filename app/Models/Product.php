@@ -18,7 +18,7 @@ class Product extends Model
         'title',
         'description',
         'price',
-        'sold_qty',
+        'qty',
         'type',
         'status',
         'is_active',
