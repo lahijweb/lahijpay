@@ -22,6 +22,7 @@ class Product extends Model
         'type',
         'status',
         'is_active',
+        'get_address',
         'is_scheduled',
         'start_date',
         'end_date',
@@ -31,10 +32,16 @@ class Product extends Model
         'type' => ProductTypeEnum::class,
         'status' => ProductStatusEnum::class,
         'is_active' => 'boolean',
+        'get_address' => 'boolean',
         'is_scheduled' => 'boolean',
         'start_date' => 'datetime',
         'end_date' => 'datetime',
     ];
+
+    public function getRouteKeyName()
+    {
+        return 'slug';
+    }
 
     public function scopeActive($query)
     {

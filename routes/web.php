@@ -3,6 +3,7 @@
 use App\Http\Controllers\LinkController;
 use App\Http\Controllers\Payment\PaymentController;
 use App\Http\Controllers\Payment\VerifyController;
+use App\Http\Controllers\ProductController;
 use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
@@ -13,3 +14,6 @@ Route::get('/callback', [VerifyController::class, 'callback'])->name('payment.ca
 
 Route::get('/link/{link}', [LinkController::class, 'index'])->name('link.index');
 Route::post('/link/{slug}', [LinkController::class, 'store'])->name('link.store');
+
+Route::get('/product/{product}', [ProductController::class, 'index'])->name('product.index');
+Route::post('/product/{slug}', [ProductController::class, 'store'])->name('product.store');

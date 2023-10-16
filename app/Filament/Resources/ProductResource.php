@@ -91,6 +91,10 @@ class ProductResource extends Resource
                             ->inline(false)
                             ->default(true)
                             ->label('فعال'),
+                        Toggle::make('get_address')
+                            ->inline(false)
+                            ->default(true)
+                            ->label('دریافت آدرس'),
                         Toggle::make('is_scheduled')
                             ->inline(false)
                             ->default(false)

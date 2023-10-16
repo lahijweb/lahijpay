@@ -22,6 +22,7 @@ return new class extends Migration
             $table->enum('type', ['physical', 'digital'])->default('digital');
             $table->enum('status', ['draft', 'published', 'unpublished', 'archived'])->default('draft');
             $table->boolean('is_active')->default(true);
+            $table->boolean('get_address')->default(false);
             $table->boolean('is_scheduled')->default(false);
             $table->timestamp('start_date')->nullable();
             $table->timestamp('end_date')->nullable();

@@ -195,7 +195,7 @@ class PaymentResource extends Resource
                     ->schema([
                         TextEntry::make('payable_type')->label('نوع'),
                         TextEntry::make('payable.id')->label('شناسه'),
-                        TextEntry::make('payable.title')->label('عنوان')
+                        TextEntry::make('payable.title')->label('عنوان')->default('-')
                     ])->columns(3)
                     ->hidden(fn($record) => is_null($record->payable_id))
                     ->collapsible(),

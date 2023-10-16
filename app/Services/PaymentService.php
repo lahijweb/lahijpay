@@ -2,7 +2,9 @@
 
 namespace App\Services;
 
+use App\Enums\PayableTypeEnum;
 use App\Models\Gateway;
+use App\Models\Order;
 use App\Models\Payment;
 use Shetabit\Payment\Facade\Payment as Driver;
 use Shetabit\Multipay\Invoice;
@@ -21,7 +23,7 @@ class PaymentService
             ->config($gatewayInfo->config)
             ->callbackUrl(url('/callback/' . $invoice->getUuid()));
         $driver->purchase($invoice, function ($driver, $transactionId) use ($invoice, $request, $gatewayInfo) {
-            Payment::create([
+            $newPayment = Payment::create([
                 'uuid' => $invoice->getUuid(),
                 'payable_type' => $request->payable_type,
                 'payable_id' => $request->payable_id,
@@ -33,6 +35,11 @@ class PaymentService
                 'gateway_id' => $gatewayInfo->id,
                 'transactionid' => $transactionId
             ]);
+            if ($request->payable_type == PayableTypeEnum::Order->value) {
+                $order = Order::find($request->payable_id);
+                $order->payment_id = $newPayment->id;
+                $order->save();
+            }
         });
         return $driver->pay()->render();
     }
