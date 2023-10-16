@@ -2,7 +2,7 @@
 @section('content')
     <main id="content" role="main">
         <div class="container text-center mt-10">
-            <img class="img-fluid mb-5" height="250px" width="250px" src="{{ asset('svg/oc-error.svg') }}" alt="error" style="width: 20rem;">
+            <img class="img-fluid mb-5" height="250px" width="250px" src="{{ asset('svg/oc-error.svg') }}" alt="error" style="width: 15rem;">
             @if($errors->any())
                 @foreach($errors->all() as $error)
                     <h1 class="fs-4">{{ $error }}</h1>
