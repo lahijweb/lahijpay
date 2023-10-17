@@ -17,6 +17,7 @@ class ViewOrder extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
+            Actions\EditAction::make(),
             Actions\Action::make('updateStatus')
                 ->form([
                     Select::make('status_id')
@@ -33,7 +34,8 @@ class ViewOrder extends ViewRecord
                         ->success()
                         ->send();
                 })
-                ->label('بروزرسانی وضعیت')
+                ->disabled(fn(Order $record): bool => $record->status_id == OrderStatus::PENDING_PAYMENT)
+                ->label('بروزرسانی وضعیت'),
         ];
     }
 }

@@ -7,6 +7,7 @@ use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
 use App\Models\OrderStatus;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
@@ -32,7 +33,35 @@ class OrderResource extends Resource
     {
         return $form
             ->schema([
-                //
+                \Filament\Forms\Components\Section::make()
+                    ->schema([
+                        TextInput::make('first_name')
+                            ->required()
+                            ->placeholder('نام')
+                            ->label('نام'),
+                        TextInput::make('last_name')
+                            ->placeholder('نام خانوادگی')
+                            ->label('نام خانوادگی'),
+                        TextInput::make('email')
+                            ->placeholder('ایمیل')
+                            ->label('ایمیل'),
+                        TextInput::make('mobile')
+                            ->placeholder('موبایل')
+                            ->label('موبایل'),
+                        TextInput::make('province')
+                            ->placeholder('استان')
+                            ->label('استان'),
+                        TextInput::make('city')
+                            ->placeholder('شهر')
+                            ->label('شهر'),
+                        TextInput::make('zip')
+                            ->placeholder('کد پستی')
+                            ->label('کد پستی'),
+                        TextInput::make('address')
+                            ->placeholder('آدرس')
+                            ->columnSpan(2)
+                            ->label('آدرس'),
+                    ])->columns(3)
             ]);
     }
 
@@ -118,6 +147,7 @@ class OrderResource extends Resource
                                 ->success()
                                 ->send();
                         })
+                        ->disabled(fn(Order $record): bool => $record->status_id == OrderStatus::PENDING_PAYMENT)
                         ->label('بروزرسانی وضعیت')
                         ->icon('heroicon-m-pencil-square'),
                 ])
@@ -207,6 +237,7 @@ class OrderResource extends Resource
         return [
             'index' => Pages\ListOrders::route('/'),
             'view' => Pages\ViewOrder::route('/{record}'),
+            'edit' => Pages\EditOrder::route('/{record}/edit'),
         ];
     }
 
