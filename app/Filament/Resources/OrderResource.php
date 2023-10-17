@@ -5,11 +5,13 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\OrderResource\Pages;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Models\Order;
-use Filament\Forms;
+use App\Models\OrderStatus;
+use Filament\Forms\Components\Select;
 use Filament\Forms\Form;
 use Filament\Infolists\Components\Section;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -97,7 +99,28 @@ class OrderResource extends Resource
                     ->label('محصول'),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make()->label('مشاهده'),
+                    Tables\Actions\EditAction::make()->label('ویرایش'),
+                    Tables\Actions\Action::make('updateStatus')
+                        ->form([
+                            Select::make('status_id')
+                                ->label('وضعیت')
+                                ->options(OrderStatus::query()->pluck('title', 'id'))
+                                ->default(fn(Order $record): int => $record->status_id)
+                                ->required(),
+                        ])
+                        ->action(function (array $data, Order $record): void {
+                            $record->status()->associate($data['status_id']);
+                            $record->save();
+                            Notification::make()
+                                ->title('وضعیت سفارش با موفقیت بروزرسانی شد.')
+                                ->success()
+                                ->send();
+                        })
+                        ->label('بروزرسانی وضعیت')
+                        ->icon('heroicon-m-pencil-square'),
+                ])
             ])
             ->bulkActions([
                 //
@@ -136,6 +159,14 @@ class OrderResource extends Resource
                         TextEntry::make('total_price')
                             ->money('IRR')
                             ->label('مبلغ کل'),
+                        TextEntry::make('status.title')
+                            ->label('وضعیت سفارش'),
+                        TextEntry::make('created_at')
+                            ->jalaliDateTime()
+                            ->label('تاریخ ثبت'),
+                        TextEntry::make('payment.verified_at')
+                            ->jalaliDateTime()
+                            ->label('تاریخ پرداخت'),
                     ])
                     ->columns(3)
                     ->collapsible(),
