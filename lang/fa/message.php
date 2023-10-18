@@ -7,7 +7,7 @@ return [
     'transaction_verified' => 'تراکنش با موفقیت انجام شد.',
     'transaction_not_verified' => 'تراکنش با خطا مواجه شد.',
     'link_not_active' => 'لینک غیر فعال است.',
-    'link_is_schedule_error' => 'لینک زمانبندی شده است.',
+    'link_is_schedule_error' => 'لینک زمانبندی شده است. تاریخ اعتبار از :start_date تا تاریخ :end_date می‌باشد.',
     'link_max_uses_error' => 'تعداد استفاده از لینک به پایان رسیده است.',
     'product_is_schedule_error' => 'فروش محصول زمانبندی شده است. تاریخ فروش از :start_date تا تاریخ :end_date می‌باشد.',
     'product_not_active' => 'محصول غیر فعال است.',

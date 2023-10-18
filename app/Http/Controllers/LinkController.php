@@ -6,52 +6,60 @@ use App\Http\Requests\StoreLinkRequest;
 use App\Models\Gateway;
 use App\Models\Link;
 use App\Services\PaymentService;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\View;
 
 class LinkController extends Controller
 {
     public function index(Link $link)
     {
-        if ($link->is_active != true) {
-            $message = [
-                'status' => '402',
-                'statusText' => 'خطا',
-                'message' => __('message.link_not_active'),
-            ];
-            return view('error')->with('message', $message);
-        }
-        if ($link->is_scheduled) {
-            $current_time = date('Y-m-d H:i:s');
-            if ($current_time < $link->start_date || $current_time > $link->end_date) {
-                $message = [
-                    'status' => '402',
-                    'statusText' => 'خطا',
-                    'message' => __('message.link_is_schedule_error'),
-                    'data' => [
-                        'اعتبار لینک از تاریخ ' . verta($link->start_date) . ' تا تاریخ ' . verta($link->end_date) . ' می‌باشد.'
-                    ]
-                ];
-                return view('error')->with('message', $message);
-            }
-        }
-        if ($link->max_uses) {
-            $used = $link->payments()->accepted()->count();
-            if ($used >= $link->max_uses) {
-                $message = [
-                    'status' => '402',
-                    'statusText' => 'خطا',
-                    'message' => __('message.link_max_uses_error'),
-                ];
-                return view('error')->with('message', $message);
-            }
-        }
+        $message = $this->validateLink($link);
+        if ($message)
+            return View::make('error')->with('message', $message);
+
         $drivers = Gateway::active()->get();
         return view('link.link', compact(['drivers', 'link']));
     }
 
     public function store(StoreLinkRequest $request, Link $slug)
     {
+        $message = $this->validateLink($slug);
+        if ($message)
+            return View::make('error')->with('message', $message);
+
         $paymentService = new PaymentService();
-        $data = [
+        $data = $this->preparePaymentData($request, $slug);
+        return $paymentService->store((object)$data);
+    }
+
+    private function validateLink(Link $link)
+    {
+        if (!$link->is_active)
+            return $this->errorMessage(__('message.link_not_active'));
+
+        if ($link->is_scheduled) {
+            $currentTime = now();
+            if ($currentTime <= $link->start_date || $currentTime >= $link->end_date) {
+                $message = __('message.link_is_schedule_error', [
+                    'start_date' => verta($link->start_date),
+                    'end_date' => verta($link->end_date),
+                ]);
+                return $this->errorMessage($message);
+            }
+        }
+
+        if ($link->max_uses) {
+            $used = $link->payments()->accepted()->count();
+            if ($used >= $link->max_uses)
+                return $this->errorMessage(__('message.link_max_uses_error'));
+        }
+
+        return null;
+    }
+
+    private function preparePaymentData(Request $request, Link $slug)
+    {
+        return [
             'driver' => $request->driver,
             'payable_type' => get_class($slug),
             'payable_id' => $slug->id,
@@ -61,6 +69,14 @@ class LinkController extends Controller
             'mobile' => $request->mobile,
             'amount' => $slug->amount ?? $request->amount,
         ];
-        return $paymentService->store((object)$data);
+    }
+
+    private function errorMessage($message)
+    {
+        return [
+            'status' => '402',
+            'statusText' => 'خطا',
+            'message' => $message,
+        ];
     }
 }
