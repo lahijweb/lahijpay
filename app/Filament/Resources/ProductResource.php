@@ -40,78 +40,96 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Section::make()
+                Forms\Components\Group::make()
                     ->schema([
-                        TextInput::make('title')
-                            ->required()
-                            ->placeholder('عنوان محصول')
-                            ->label('عنوان'),
-                        TextInput::make('description')
-                            ->required()
-                            ->placeholder('توضیحات محصول')
-                            ->columnSpan(2)
-                            ->label('توضیحات'),
-                        TextInput::make('slug')
-                            ->required()
-                            ->suffix(url('/') . '/product/')
-                            ->maxLength(255)
-                            ->placeholder('آدرس')
-                            ->unique(ignoreRecord: true)
-                            ->alphaDash()
-                            ->label('slug'),
-                        TextInput::make('sku')
-                            ->maxLength(255)
-                            ->placeholder('sku')
-                            ->unique(ignoreRecord: true)
-                            ->required()
-                            ->label('sku'),
-                        TextInput::make('qty')
-                            ->numeric('integer')
-                            ->inputMode('numeric')
-                            ->placeholder('موجودی')
-                            ->helperText('تعداد موجودی محصول، برای نامحدود این فیلد را خالی بگذارید.')
-                            ->label('موجودی'),
-                        TextInput::make('price')
-                            ->numeric('integer')
-                            ->inputMode('numeric')
-                            ->placeholder('مبلغ')
-                            ->required()
-                            ->suffix('ریال')
-                            ->label('مبلغ'),
-                        Select::make('type')
-                            ->options(ProductTypeEnum::class)
-                            ->required()
-                            ->label('نوع محصول'),
-                        Select::make('status')
-                            ->options(ProductStatusEnum::class)
-                            ->default('published')
-                            ->required()
-                            ->label('وضعیت'),
-                        Toggle::make('is_active')
-                            ->inline(false)
-                            ->default(true)
-                            ->label('فعال'),
-                        Toggle::make('get_address')
-                            ->inline(false)
-                            ->default(true)
-                            ->label('دریافت آدرس'),
-                        Toggle::make('is_scheduled')
-                            ->inline(false)
-                            ->default(false)
-                            ->label('زمانبندی')
-                            ->live(),
-                        DateTimePicker::make('start_date')
-                            ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
-                            ->required(fn(Get $get): bool => filled($get('is_scheduled')))
-                            ->placeholder('اعتبار فروش از تاریخ')
-                            ->label('اعتبار فروش از تاریخ'),
-                        DateTimePicker::make('end_date')
-                            ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
-                            ->required(fn(Get $get): bool => filled($get('is_scheduled')))
-                            ->placeholder('اعتبار فروش تا تاریخ')
-                            ->label('اعتبار فروش تا تاریخ'),
-                    ])->columns(3)
-            ]);
+                        Section::make()
+                            ->schema([
+                                TextInput::make('title')
+                                    ->required()
+                                    ->placeholder('عنوان محصول')
+                                    ->label('عنوان')
+                                    ->columnSpanFull(),
+                                TextInput::make('slug')
+                                    ->required()
+                                    ->prefix(url('/') . '/product/')
+                                    ->maxLength(255)
+                                    ->placeholder('آدرس')
+                                    ->unique(ignoreRecord: true)
+                                    ->alphaDash()
+                                    ->extraAttributes([
+                                        'dir' => 'ltr'
+                                    ])
+                                    ->label('slug')
+                                    ->columnSpanFull(),
+                                Forms\Components\Textarea::make('description')
+                                    ->required()
+                                    ->placeholder('توضیحات محصول')
+                                    ->columnSpan(2)
+                                    ->label('توضیحات')
+                                    ->columnSpanFull(),
+                            ]),
+                        Section::make()
+                            ->schema([
+                                TextInput::make('sku')
+                                    ->maxLength(255)
+                                    ->placeholder('sku')
+                                    ->unique(ignoreRecord: true)
+                                    ->required()
+                                    ->label('sku'),
+                                TextInput::make('qty')
+                                    ->numeric('integer')
+                                    ->inputMode('numeric')
+                                    ->placeholder('موجودی')
+                                    ->helperText('تعداد موجودی محصول، برای نامحدود این فیلد را خالی بگذارید.')
+                                    ->label('موجودی'),
+                                TextInput::make('price')
+                                    ->numeric('integer')
+                                    ->inputMode('numeric')
+                                    ->placeholder('مبلغ')
+                                    ->required()
+                                    ->suffix('ریال')
+                                    ->label('مبلغ'),
+                            ])->columns(3)
+                    ])->columnSpan(2),
+                Forms\Components\Group::make()
+                    ->schema([
+                        Section::make()
+                            ->schema([
+                                Select::make('type')
+                                    ->options(ProductTypeEnum::class)
+                                    ->required()
+                                    ->label('نوع محصول'),
+                                Select::make('status')
+                                    ->options(ProductStatusEnum::class)
+                                    ->default('published')
+                                    ->required()
+                                    ->label('وضعیت'),
+                                Toggle::make('is_active')
+                                    ->inline(false)
+                                    ->default(true)
+                                    ->label('فعال'),
+                                Toggle::make('get_address')
+                                    ->inline(false)
+                                    ->default(true)
+                                    ->label('دریافت آدرس'),
+                                Toggle::make('is_scheduled')
+                                    ->inline(false)
+                                    ->default(false)
+                                    ->label('زمانبندی')
+                                    ->live(),
+                                DateTimePicker::make('start_date')
+                                    ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
+                                    ->required(fn(Get $get): bool => filled($get('is_scheduled')))
+                                    ->placeholder('اعتبار فروش از تاریخ')
+                                    ->label('اعتبار فروش از تاریخ'),
+                                DateTimePicker::make('end_date')
+                                    ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
+                                    ->required(fn(Get $get): bool => filled($get('is_scheduled')))
+                                    ->placeholder('اعتبار فروش تا تاریخ')
+                                    ->label('اعتبار فروش تا تاریخ'),
+                            ])->columns(1)
+                    ])->columnSpan(1),
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table

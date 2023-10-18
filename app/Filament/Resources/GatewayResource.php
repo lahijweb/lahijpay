@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\GatewayResource\Pages;
 use App\Filament\Resources\GatewayResource\RelationManagers;
 use App\Models\Gateway;
+use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Form;
 use Filament\Resources\Resource;
@@ -29,25 +30,31 @@ class GatewayResource extends Resource
     {
         return $form
             ->schema([
-                Section::make()
-                    ->schema([
-                        TextInput::make('name')
-                            ->label('نام')
-                            ->disabledOn('edit'),
-                        TextInput::make('driver')
-                            ->label('درایور')
-                            ->disabledOn('edit'),
-                        Toggle::make('is_default')
-                            ->label('پیشفرض'),
-                        Toggle::make('is_active')
-                            ->label('فعال'),
-                        KeyValue::make('config')
-                            ->label('تنظیمات')
-                            ->addable(false)
-                            ->deletable(false)
-                            ->editableKeys(false),
-                    ])->columns(2)
-            ]);
+                Group::make()->schema([
+                    Section::make()
+                        ->schema([
+                            TextInput::make('name')
+                                ->label('نام')
+                                ->disabledOn('edit')
+                                ->columnSpanFull(),
+                            KeyValue::make('config')
+                                ->label('تنظیمات')
+                                ->addable(false)
+                                ->deletable(false)
+                                ->editableKeys(false)
+                                ->columnSpanFull(),
+                        ])
+                ])->columnSpan(2),
+                Group::make()->schema([
+                    Section::make()
+                        ->schema([
+                            Toggle::make('is_default')
+                                ->label('پیشفرض'),
+                            Toggle::make('is_active')
+                                ->label('فعال'),
+                        ])->columns(1)
+                ])->columnSpan(1),
+            ])->columns(3);
     }
 
     public static function table(Table $table): Table
@@ -58,9 +65,9 @@ class GatewayResource extends Resource
                     ->searchable()
                     ->sortable('desc')
                     ->label('شناسه'),
-                TextColumn::make('driver')
-                    ->searchable()
-                    ->label('درایور'),
+//                TextColumn::make('driver')
+//                    ->searchable()
+//                    ->label('درایور'),
                 TextColumn::make('name')
                     ->searchable()
                     ->label('نام'),
