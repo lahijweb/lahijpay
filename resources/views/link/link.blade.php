@@ -11,7 +11,7 @@
                     </div>
                 @endif
                 <div class="card card-lg card-bordered">
-                    <div class="card-header text-center">
+                    <div class="card-header border text-center">
                         <h1 class="card-title fs-4">{{ $link->title }}</h1>
                         <p class="card-text">{{ $link->description }}</p>
                     </div>
@@ -28,17 +28,23 @@
                                 <div class="col-sm-6">
                                     <div class="mb-4">
                                         <label class="form-label">نام خانوادگی</label>
-                                        <input type="text" class="form-control form-control-lg" name="last_name" value="{{ old('last_name') }}" maxlength="255" placeholder="نام خانوادگی" aria-label="نام خانوادگی">
+                                        <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" maxlength="255" placeholder="نام خانوادگی" aria-label="نام خانوادگی">
                                     </div>
                                 </div>
                             </div>
-                            <div class="mb-4">
-                                <label class="form-label">ایمیل</label>
-                                <input type="email" class="form-control form-control-lg" name="email" value="{{ old('email') }}" maxlength="255" placeholder="ایمیل" aria-label="ایمیل">
-                            </div>
-                            <div class="mb-4">
-                                <label class="form-label">موبایل</label>
-                                <input type="text" class="form-control form-control-lg" name="mobile" value="{{ old('mobile') }}" maxlength="255" placeholder="موبایل" aria-label="موبایل">
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="mb-4">
+                                        <label class="form-label">ایمیل</label>
+                                        <input type="email" class="form-control" name="email" value="{{ old('email') }}" maxlength="255" placeholder="ایمیل" aria-label="ایمیل">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="mb-4">
+                                        <label class="form-label">موبایل</label>
+                                        <input type="text" class="form-control" name="mobile" value="{{ old('mobile') }}" maxlength="255" placeholder="موبایل" aria-label="موبایل">
+                                    </div>
+                                </div>
                             </div>
                             <div class="mb-4">
                                 <div class="d-flex justify-content-between align-items-center">

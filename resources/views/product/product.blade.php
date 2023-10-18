@@ -18,7 +18,7 @@
                                     <div class="col-sm-6">
                                         <div class="mb-4">
                                             <label class="form-label">نام خانوادگی</label>
-                                            <input type="text" class="form-control form-control-lg" name="last_name" value="{{ old('last_name') }}" maxlength="255" placeholder="نام خانوادگی" aria-label="نام خانوادگی">
+                                            <input type="text" class="form-control" name="last_name" value="{{ old('last_name') }}" maxlength="255" placeholder="نام خانوادگی" aria-label="نام خانوادگی">
                                         </div>
                                     </div>
                                 </div>
@@ -26,16 +26,44 @@
                                     <div class="col-sm-6 mb-4 mb-sm-0">
                                         <div class="mb-4">
                                             <label class="form-label">ایمیل</label>
-                                            <input type="email" class="form-control form-control-lg" name="email" value="{{ old('email') }}" maxlength="255" placeholder="ایمیل" aria-label="ایمیل">
+                                            <input type="email" class="form-control" name="email" value="{{ old('email') }}" maxlength="255" placeholder="ایمیل" aria-label="ایمیل">
                                         </div>
                                     </div>
                                     <div class="col-sm-6">
                                         <div class="mb-4">
                                             <label class="form-label">موبایل</label>
-                                            <input type="text" class="form-control form-control-lg" name="mobile" value="{{ old('mobile') }}" maxlength="255" placeholder="موبایل" aria-label="موبایل">
+                                            <input type="text" class="form-control" name="mobile" value="{{ old('mobile') }}" maxlength="255" placeholder="موبایل" aria-label="موبایل">
                                         </div>
                                     </div>
                                 </div>
+                                @if($product->get_address)
+                                    <div class="row">
+                                        <div class="col-sm-6 mb-4 mb-sm-0">
+                                            <div class="mb-4">
+                                                <label class="form-label">استان</label>
+                                                <input type="text" class="form-control" name="province" value="{{ old('province') }}" maxlength="255" placeholder="استان" aria-label="استان">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="mb-4">
+                                                <label class="form-label">شهر</label>
+                                                <input type="text" class="form-control" name="city" value="{{ old('city') }}" maxlength="255" placeholder="شهر" aria-label="شهر">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="mb-4">
+                                                <label class="form-label">آدرس</label>
+                                                <input type="text" class="form-control" name="address" value="{{ old('address') }}" maxlength="255" placeholder="آدرس" aria-label="آدرس">
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="mb-4">
+                                                <label class="form-label">کد پستی</label>
+                                                <input type="text" class="form-control" name="zip" value="{{ old('zip') }}" maxlength="255" placeholder="کد پستی" aria-label="کد پستی">
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endif
                                 <div class="row mb-4">
                                     <div class="d-flex justify-content-between align-items-center">
                                         <label class="form-label">درگاه</label>
