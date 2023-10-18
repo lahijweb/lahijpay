@@ -6,6 +6,7 @@ use App\Enums\ProductStatusEnum;
 use App\Enums\ProductTypeEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Product extends Model
@@ -52,4 +53,30 @@ class Product extends Model
     {
         return $query->where('is_scheduled', true);
     }
+
+    public function orders(): HasMany
+    {
+        return $this->hasMany(Order::class, 'product_id');
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'product_id');
+    }
+
+    public function isProductAvailable()
+    {
+        return $this->qty > 0;
+    }
+
+    public function isProductUnlimited()
+    {
+        return $this->qty === null;
+    }
+
+    public function isProductForSale()
+    {
+        return $this->isProductAvailable() || $this->isProductUnlimited();
+    }
+
 }

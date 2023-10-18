@@ -24,8 +24,6 @@ return new class extends Migration {
             $table->string('city')->nullable();
             $table->string('address')->nullable();
             $table->string('zip')->nullable();
-            $table->string('tracking_code')->nullable();
-            $table->text('note')->nullable();
             $table->foreignId('status_id')->constrained('order_statuses');
             $table->timestamps();
         });

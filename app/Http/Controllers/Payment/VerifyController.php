@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers\Payment;
 
+use App\Enums\PayableTypeEnum;
 use App\Enums\PaymentStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Models\Gateway;
+use App\Models\OrderStatus;
 use App\Models\Payment;
 use Illuminate\Support\Facades\Redirect;
 use Shetabit\Multipay\Exceptions\InvalidPaymentException;
@@ -33,6 +35,11 @@ class VerifyController extends Controller
             $transactionInfo->status = PaymentStatusEnum::Accepted;
             $transactionInfo->verified_at = now();
             $transactionInfo->save();
+            if ($transactionInfo->payable_type == PayableTypeEnum::Order){
+                $transactionInfo->payable->update(['status_id' => OrderStatus::PAID]);
+                if ($transactionInfo->payable->product->qty > 0)
+                    $transactionInfo->payable->product->decrement('qty');
+            }
             $message = [
                 'status' => '200',
                 'statusText' => 'موفق',

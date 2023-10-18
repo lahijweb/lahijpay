@@ -12,6 +12,7 @@ class OrderStatus extends Model
 
     protected $table = 'order_statuses';
     const PENDING_PAYMENT = 1;
+    const PAID = 2;
 
     protected $fillable = [
         'title',

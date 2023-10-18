@@ -271,6 +271,10 @@ class OrderResource extends Resource
             'last_name',
             'email',
             'mobile',
+            'province',
+            'city',
+            'zip',
+            'address',
         ];
     }
 
