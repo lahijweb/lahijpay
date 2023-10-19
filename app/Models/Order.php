@@ -26,8 +26,6 @@ class Order extends Model
         'address',
         'zip',
         'status_id',
-        'tracking_code',
-        'note',
     ];
 
     protected $casts = [
