@@ -141,6 +141,7 @@ class CustomerResource extends Resource
                     ->label('تاریخ ایجاد'),
             ])
             ->filters([
+                Tables\Filters\TrashedFilter::make(),
                 Filter::make('created_at')
                     ->form([
                         DatePicker::make('created_from')
@@ -176,13 +177,14 @@ class CustomerResource extends Resource
                     Tables\Actions\RestoreBulkAction::make(),
                 ]),
             ])
+            ->defaultSort('id', 'desc')
             ->emptyStateHeading('مشتریی یافت نشد!');
     }
 
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\AddressesRelationManager::class,
         ];
     }
 
