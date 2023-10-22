@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Enums\InvoiceStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Invoice extends Model
 {
@@ -27,6 +29,7 @@ class Invoice extends Model
     ];
 
     protected $casts = [
+        'status' => InvoiceStatusEnum::class,
         'due_at' => 'datetime',
         'paid_at' => 'datetime',
         'canceled_at' => 'datetime',
@@ -35,6 +38,11 @@ class Invoice extends Model
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(InvoiceProduct::class);
     }
 
 }

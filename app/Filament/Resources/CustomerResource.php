@@ -29,7 +29,7 @@ class CustomerResource extends Resource
     protected static ?string $pluralModelLabel = 'مشتریان';
     protected static ?string $pluralLabel = 'مشتریان';
     protected static ?string $navigationGroup = 'ابزارها';
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 4;
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form

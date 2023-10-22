@@ -26,7 +26,7 @@ class AddressResource extends Resource
     protected static ?string $modelLabel = 'آدرس';
     protected static ?string $pluralLabel = 'آدرس‌ها';
     protected static ?string $navigationGroup = 'ابزارها';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
     protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
