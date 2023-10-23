@@ -14,6 +14,8 @@ use Filament\Forms\Form;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
+use Filament\Forms\Set;
+use Filament\Forms\Components\Placeholder;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
@@ -40,7 +42,7 @@ class InvoiceResource extends Resource
                     ->schema([
                         TextInput::make('invoice_no')
                             ->required()
-                            ->unique()
+                            ->unique(ignoreRecord: true)
                             ->placeholder('شماره فاکتور')
                             ->label('شماره فاکتور'),
                         Select::make('customer_id')
@@ -56,7 +58,7 @@ class InvoiceResource extends Resource
                             ->default(InvoiceStatusEnum::Draft)
                             ->label('وضعیت'),
                     ])->columns(3),
-                Section::make('')
+                Section::make()
                     ->schema([
                         Repeater::make('products')
                             ->relationship()
@@ -67,25 +69,122 @@ class InvoiceResource extends Resource
                                     ->searchable()
                                     ->preload()
                                     ->required()
+                                    ->live()
+                                    ->afterStateUpdated(function (Set $set, ?string $state) {
+                                        if ($state) {
+                                            $product = Product::find($state);
+                                            $set('product_price', number_format($product->price, 0, '', ''));
+                                        }
+                                    })
+                                    ->columnSpan(2)
                                     ->label('محصول'),
-                                TextInput::make('product_sku')
-                                    ->label('قیمت واحد'),
                                 TextInput::make('product_qty')
-                                    ->integer()
+                                    ->numeric()
+                                    ->inputMode('numeric')
                                     ->required()
+                                    ->live()
                                     ->default(1)
+                                    ->step(1)
                                     ->minValue(1)
                                     ->label('تعداد'),
                                 TextInput::make('product_price')
+                                    ->default(0)
+                                    ->numeric()
+                                    ->inputMode('numeric')
+                                    ->live()
+                                    ->required()
+                                    ->minValue(0)
+                                    ->columnSpan(2)
+                                    ->suffix('ریال')
                                     ->label('قیمت واحد'),
+                                TextInput::make('discount')
+                                    ->default(0)
+                                    ->numeric()
+                                    ->inputMode('numeric')
+                                    ->live()
+                                    ->required()
+                                    ->minValue(0)
+                                    ->columnSpan(2)
+                                    ->suffix('ریال')
+                                    ->label('تخفیف'),
+                                TextInput::make('tax')
+                                    ->numeric()
+                                    ->default(0)
+                                    ->live()
+                                    ->required()
+                                    ->minValue(0)
+                                    ->suffix('%')
+                                    ->label('مالیات'),
+                                Placeholder::make('product_total')
+                                    ->content(function ($get) {
+                                        $total = $get('product_qty') * $get('product_price');
+                                        $total -= $get('discount');
+                                        $total += $total * ($get('tax') / 100);
+                                        return number_format($total);
+                                    })
+                                    ->columnSpan(2)
+                                    ->label('قیمت کل'),
                             ])
+                            ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
+                                $product = Product::find($data['product_id']);
+                                $data['product_price'] = (int)$product->price;
+                                $data['product_sku'] = $product->sku;
+                                $data['product_title'] = $product->title;
+                                $data['total'] = $data['product_qty'] * $data['product_price'];
+                                return $data;
+                            })
+                            ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
+                                $product = Product::find($data['product_id']);
+                                $data['product_price'] = (int)$product->price;
+                                $data['product_sku'] = $product->sku;
+                                $data['product_title'] = $product->title;
+                                $data['total'] = $data['product_qty'] * $data['product_price'];
+                                return $data;
+                            })
                             ->minItems(1)
                             ->reorderable()
                             ->reorderableWithButtons()
                             ->collapsible()
                             ->addActionLabel('افزودن محصول جدید')
-                            ->columns(3)
-                    ])
+                            ->columns(10)
+                    ]),
+                Section::make()
+                    ->schema([
+                        Placeholder::make('discount')
+                            ->content(function ($get) {
+                                $products = $get('products');
+                                $total = 0;
+                                foreach ($products as $item) {
+                                    $discount = $item['discount'];
+                                    if (is_numeric($discount))
+                                        $total += $discount;
+                                }
+                                return number_format($total);
+                            })->label('تخفیف'),
+                        Placeholder::make('tax')
+                            ->content(function ($get) {
+                                $products = $get('products');
+                                $total = 0;
+                                foreach ($products as $item) {
+                                    $total = $item['product_qty'] * $item['product_price'];
+                                    $total -= $item['discount'];
+                                    $total = $total * ($item['tax'] / 100);
+                                }
+                                return number_format($total);
+                            })->label('مالیات'),
+                        Placeholder::make('amount')
+                            ->content(function ($get) {
+                                $products = $get('products');
+                                $total = 0;
+                                foreach ($products as $item) {
+                                    $total = $item['product_qty'] * $item['product_price'];
+                                    $total -= $item['discount'];
+                                    $total += $total * ($item['tax'] / 100);
+                                }
+                                return number_format($total);
+                            })
+                            ->label('مبلغ کل'),
+                    ])->columns(3)
             ]);
     }
 

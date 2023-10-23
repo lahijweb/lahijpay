@@ -15,6 +15,7 @@ class Invoice extends Model
     protected $table = 'invoices';
 
     protected $fillable = [
+        'uuid',
         'invoice_no',
         'customer_id',
         'amount',
