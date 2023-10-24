@@ -30,6 +30,14 @@ class Invoice extends Model
     ];
 
     protected $casts = [
+        'uuid' => 'string',
+        'invoice_no' => 'string',
+        'customer_id' => 'integer',
+        'amount' => 'float',
+        'discount' => 'float',
+        'tax' => 'float',
+        'shipping' => 'float',
+        'total' => 'float',
         'status' => InvoiceStatusEnum::class,
         'due_at' => 'datetime',
         'paid_at' => 'datetime',

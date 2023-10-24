@@ -23,13 +23,13 @@ class CreateInvoice extends CreateRecord
     protected function afterCreate(): void
     {
         $products = $this->record->products;
-        $amount = $discount = $tax = $total = 0;
+        $amount = $discount = $tax = 0;
         foreach ($products as $product) {
-            $amount += $this->calculateAmount($product);
+            $amount += $product->qty * $product->price;
             $discount += $product->discount;
             $tax += $this->calculateTax($product);
-            $total += $amount - $discount + $tax;
         }
+        $total = $amount - $discount + $tax;
         $this->record->amount = $amount;
         $this->record->discount = $discount;
         $this->record->tax = $tax;
@@ -37,17 +37,9 @@ class CreateInvoice extends CreateRecord
         $this->record->save();
     }
 
-    protected function calculateAmount(object $product): int
-    {
-        $total = $product->product_qty * $product->product_price;
-        $total -= $product->discount;
-        $total += $total * ($product->tax / 100);
-        return $total;
-    }
-
     protected function calculateTax(object $product): int
     {
-        $total = $product->product_qty * $product->product_price;
+        $total = $product->qty * $product->price;
         $total -= $product->discount;
         $total *= ($product->tax / 100);
         return $total;

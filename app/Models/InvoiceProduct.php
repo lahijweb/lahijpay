@@ -25,6 +25,18 @@ class InvoiceProduct extends Model
         'total',
     ];
 
+    protected $casts = [
+        'invoice_id' => 'integer',
+        'product_id' => 'integer',
+        'sku' => 'string',
+        'title' => 'string',
+        'qty' => 'integer',
+        'price' => 'float',
+        'discount' => 'float',
+        'tax' => 'float',
+        'total' => 'float',
+    ];
+
     public function invoice(): BelongsTo
     {
         return $this->belongsTo(Invoice::class);

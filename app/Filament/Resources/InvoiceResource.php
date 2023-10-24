@@ -76,7 +76,7 @@ class InvoiceResource extends Resource
                                             $set('price', number_format($product->price, 0, '', ''));
                                         }
                                     })
-                                    ->columnSpan(2)
+                                    ->columnSpan(3)
                                     ->label('محصول'),
                                 TextInput::make('qty')
                                     ->numeric()
@@ -110,6 +110,7 @@ class InvoiceResource extends Resource
                                 TextInput::make('tax')
                                     ->numeric()
                                     ->default(0)
+                                    ->columnSpan(2)
                                     ->live()
                                     ->required()
                                     ->minValue(0)
@@ -117,9 +118,8 @@ class InvoiceResource extends Resource
                                     ->label('مالیات'),
                                 Placeholder::make('total')
                                     ->content(function ($get) {
-                                        $total = $get('qty') * $get('price');
-                                        $total -= $get('discount');
-                                        $total += $total * ($get('tax') / 100);
+                                        $total = (int)$get('qty') * (int)$get('price') - (int)$get('discount');
+                                        $total += $total * ((int)$get('tax') / 100);
                                         return number_format($total);
                                     })
                                     ->columnSpan(2)
@@ -127,26 +127,27 @@ class InvoiceResource extends Resource
                             ])
                             ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
                                 $product = Product::find($data['product_id']);
-                                $data['price'] = (int)$product->price;
                                 $data['sku'] = $product->sku;
                                 $data['title'] = $product->title;
-                                $data['total'] = $data['qty'] * $data['price'];
+                                $total = $data['qty'] * $data['price'] - $data['discount'];
+                                $data['total'] = $total + $total * ($data['tax'] / 100);
                                 return $data;
                             })
                             ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
                                 $product = Product::find($data['product_id']);
-                                $data['price'] = (int)$product->price;
                                 $data['sku'] = $product->sku;
                                 $data['title'] = $product->title;
-                                $data['total'] = $data['qty'] * $data['price'];
+                                $total = $data['qty'] * $data['price'] - $data['discount'];
+                                $data['total'] = $total + $total * ($data['tax'] / 100);
                                 return $data;
                             })
+                            ->itemLabel(fn (array $state): ?string => Product::find($state['product_id'])['title'] ?? null)
                             ->minItems(1)
                             ->reorderable()
                             ->reorderableWithButtons()
                             ->collapsible()
                             ->addActionLabel('افزودن محصول جدید')
-                            ->columns(10)
+                            ->columns(12)
                     ]),
                 Section::make()
                     ->schema([
@@ -164,24 +165,22 @@ class InvoiceResource extends Resource
                         Placeholder::make('tax')
                             ->content(function ($get) {
                                 $products = $get('products');
-                                $total = 0;
+                                $total = $totalTax = 0;
                                 foreach ($products as $item) {
-                                    $total = $item['qty'] * $item['price'];
-                                    $total -= $item['discount'];
-                                    $total = $total * ($item['tax'] / 100);
+                                    $total = (int)$item['qty'] * (int)$item['price'] - (int)$item['discount'];
+                                    $totalTax += $total * ((int)$item['tax'] / 100);
                                 }
-                                return number_format($total);
+                                return number_format($totalTax);
                             })->label('مالیات'),
                         Placeholder::make('amount')
                             ->content(function ($get) {
                                 $products = $get('products');
-                                $total = 0;
+                                $total = $totalPrice = 0;
                                 foreach ($products as $item) {
-                                    $total = $item['qty'] * $item['price'];
-                                    $total -= $item['discount'];
-                                    $total += $total * ($item['tax'] / 100);
+                                    $total = (int)$item['qty'] * (int)$item['price'] - (int)$item['discount'];
+                                    $totalPrice += $total + $total * ((int)$item['tax'] / 100);
                                 }
-                                return number_format($total);
+                                return number_format($totalPrice);
                             })
                             ->label('مبلغ کل'),
                     ])->columns(3)
