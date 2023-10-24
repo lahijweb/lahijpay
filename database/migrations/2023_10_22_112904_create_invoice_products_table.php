@@ -15,10 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('invoice_id')->constrained();
             $table->foreignId('product_id')->constrained();
-            $table->string('product_sku');
-            $table->string('product_title');
-            $table->integer('product_qty')->default(1);
-            $table->decimal('product_price', 24, 4);
+            $table->string('sku');
+            $table->string('title');
+            $table->integer('qty')->default(1);
+            $table->decimal('price', 24, 4);
             $table->decimal('discount', 24, 4)->default(0);
             $table->decimal('tax', 24, 4)->default(0);
             $table->decimal('total', 24, 4);

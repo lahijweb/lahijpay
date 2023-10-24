@@ -73,12 +73,12 @@ class InvoiceResource extends Resource
                                     ->afterStateUpdated(function (Set $set, ?string $state) {
                                         if ($state) {
                                             $product = Product::find($state);
-                                            $set('product_price', number_format($product->price, 0, '', ''));
+                                            $set('price', number_format($product->price, 0, '', ''));
                                         }
                                     })
                                     ->columnSpan(2)
                                     ->label('محصول'),
-                                TextInput::make('product_qty')
+                                TextInput::make('qty')
                                     ->numeric()
                                     ->inputMode('numeric')
                                     ->required()
@@ -87,7 +87,7 @@ class InvoiceResource extends Resource
                                     ->step(1)
                                     ->minValue(1)
                                     ->label('تعداد'),
-                                TextInput::make('product_price')
+                                TextInput::make('price')
                                     ->default(0)
                                     ->numeric()
                                     ->inputMode('numeric')
@@ -115,9 +115,9 @@ class InvoiceResource extends Resource
                                     ->minValue(0)
                                     ->suffix('%')
                                     ->label('مالیات'),
-                                Placeholder::make('product_total')
+                                Placeholder::make('total')
                                     ->content(function ($get) {
-                                        $total = $get('product_qty') * $get('product_price');
+                                        $total = $get('qty') * $get('price');
                                         $total -= $get('discount');
                                         $total += $total * ($get('tax') / 100);
                                         return number_format($total);
@@ -127,18 +127,18 @@ class InvoiceResource extends Resource
                             ])
                             ->mutateRelationshipDataBeforeCreateUsing(function (array $data): array {
                                 $product = Product::find($data['product_id']);
-                                $data['product_price'] = (int)$product->price;
-                                $data['product_sku'] = $product->sku;
-                                $data['product_title'] = $product->title;
-                                $data['total'] = $data['product_qty'] * $data['product_price'];
+                                $data['price'] = (int)$product->price;
+                                $data['sku'] = $product->sku;
+                                $data['title'] = $product->title;
+                                $data['total'] = $data['qty'] * $data['price'];
                                 return $data;
                             })
                             ->mutateRelationshipDataBeforeSaveUsing(function (array $data): array {
                                 $product = Product::find($data['product_id']);
-                                $data['product_price'] = (int)$product->price;
-                                $data['product_sku'] = $product->sku;
-                                $data['product_title'] = $product->title;
-                                $data['total'] = $data['product_qty'] * $data['product_price'];
+                                $data['price'] = (int)$product->price;
+                                $data['sku'] = $product->sku;
+                                $data['title'] = $product->title;
+                                $data['total'] = $data['qty'] * $data['price'];
                                 return $data;
                             })
                             ->minItems(1)
@@ -166,7 +166,7 @@ class InvoiceResource extends Resource
                                 $products = $get('products');
                                 $total = 0;
                                 foreach ($products as $item) {
-                                    $total = $item['product_qty'] * $item['product_price'];
+                                    $total = $item['qty'] * $item['price'];
                                     $total -= $item['discount'];
                                     $total = $total * ($item['tax'] / 100);
                                 }
@@ -177,7 +177,7 @@ class InvoiceResource extends Resource
                                 $products = $get('products');
                                 $total = 0;
                                 foreach ($products as $item) {
-                                    $total = $item['product_qty'] * $item['product_price'];
+                                    $total = $item['qty'] * $item['price'];
                                     $total -= $item['discount'];
                                     $total += $total * ($item['tax'] / 100);
                                 }
