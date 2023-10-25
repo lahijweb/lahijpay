@@ -118,8 +118,8 @@ class InvoiceResource extends Resource
                                     ->label('مالیات'),
                                 Placeholder::make('total')
                                     ->content(function ($get) {
-                                        $total = (int)$get('qty') * (int)$get('price') - (int)$get('discount');
-                                        $total += $total * ((int)$get('tax') / 100);
+                                        $total = (float)$get('qty') * (float)$get('price') - (float)$get('discount');
+                                        $total += $total * ((float)$get('tax') / 100);
                                         return number_format($total);
                                     })
                                     ->columnSpan(2)
@@ -165,20 +165,20 @@ class InvoiceResource extends Resource
                         Placeholder::make('tax')
                             ->content(function ($get) {
                                 $products = $get('products');
-                                $total = $totalTax = 0;
+                                $totalTax = 0;
                                 foreach ($products as $item) {
-                                    $total = (int)$item['qty'] * (int)$item['price'] - (int)$item['discount'];
-                                    $totalTax += $total * ((int)$item['tax'] / 100);
+                                    $total = (float)$item['qty'] * (float)$item['price'] - (float)$item['discount'];
+                                    $totalTax += $total * ((float)$item['tax'] / 100);
                                 }
                                 return number_format($totalTax);
                             })->label('مالیات'),
                         Placeholder::make('amount')
                             ->content(function ($get) {
                                 $products = $get('products');
-                                $total = $totalPrice = 0;
+                                $totalPrice = 0;
                                 foreach ($products as $item) {
-                                    $total = (int)$item['qty'] * (int)$item['price'] - (int)$item['discount'];
-                                    $totalPrice += $total + $total * ((int)$item['tax'] / 100);
+                                    $total = (float)$item['qty'] * (float)$item['price'] - (float)$item['discount'];
+                                    $totalPrice += $total + $total * ((float)$item['tax'] / 100);
                                 }
                                 return number_format($totalPrice);
                             })
@@ -221,6 +221,7 @@ class InvoiceResource extends Resource
                     ->searchable()
                     ->toggleable()
                     ->sortable()
+                    ->badge()
                     ->label('وضعیت'),
                 TextColumn::make('created_at')
                     ->jalaliDateTime()

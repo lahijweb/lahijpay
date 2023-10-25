@@ -13,4 +13,5 @@ return [
     'product_not_active' => 'محصول غیر فعال است.',
     'product_not_published' => 'محصول غیر فعال است.',
     'product_is_qty_error' => 'موجودی محصول تمام شده است.',
+    'invoice_error' => 'خطا در دریافت اطلاعات فاکتور',
 ];

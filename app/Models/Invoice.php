@@ -44,6 +44,11 @@ class Invoice extends Model
         'canceled_at' => 'datetime',
     ];
 
+    public function getRouteKeyName(): string
+    {
+        return 'uuid';
+    }
+
     public function customer(): BelongsTo
     {
         return $this->belongsTo(Customer::class);

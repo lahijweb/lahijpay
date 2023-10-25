@@ -10,6 +10,7 @@ enum PayableTypeEnum: string implements HasLabel
     case Payment = 'App\\Models\\Payment';
     case Link = 'App\\Models\\Link';
     case Order = 'App\\Models\\Order';
+    case Invoice = 'App\\Models\\Invoice';
 
     public function getLabel(): ?string
     {
@@ -17,6 +18,7 @@ enum PayableTypeEnum: string implements HasLabel
             self::Payment => 'پرداخت',
             self::Link => 'لینک',
             self::Order => 'سفارش',
+            self::Invoice => 'فاکتور',
         };
     }
 
