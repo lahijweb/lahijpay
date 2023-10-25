@@ -60,7 +60,7 @@
                                     <label class="form-label">درگاه</label>
                                 </div>
                                 @foreach($drivers as $driver)
-                                <div class="col-sm mb-2">
+                                <div class="col-sm-30 mb-2">
                                     <label class="form-control" for="{{$driver->driver}}">
                                       <span class="form-check">
                                         <input type="radio" class="form-check-input" name="driver" value="{{ $driver->driver }}" id="{{ $driver->driver }}" @checked(old('driver', $driver->is_default))>
