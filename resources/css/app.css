@@ -1,0 +1,20 @@
+:is(.dark .dark\:text-white) {
+    & [multiple],
+    & [type=date],
+    & [type=datetime-local],
+    & [type=email],
+    & [type=month],
+    & [type=number],
+    & [type=password],
+    & [type=search],
+    & [type=tel],
+    & [type=text],
+    & [type=time],
+    & [type=url],
+    & [type=week],
+    & input:where(:not([type])),
+    & select,
+    & textarea {
+        background: none;
+    }
+}
