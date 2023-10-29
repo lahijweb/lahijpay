@@ -62,4 +62,13 @@ class InvoiceController extends Controller
             'message' => $message,
         ];
     }
+
+    public function print(Invoice $invoice)
+    {
+        $message = $this->validateInvoice($invoice);
+        if ($message)
+            return View::make('error')->with('message', $message);
+        $invoice->load('products');
+        return View::make('invoice.print', compact('invoice'));
+    }
 }

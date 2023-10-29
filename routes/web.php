@@ -21,3 +21,4 @@ Route::post('/product/{slug}', [ProductController::class, 'store'])->name('produ
 
 Route::get('/invoice/{invoice}', [InvoiceController::class, 'index'])->name('invoice.index');
 Route::post('/invoice/{invoice}', [InvoiceController::class, 'store'])->name('invoice.store');
+Route::get('/invoice/print/{invoice}', [InvoiceController::class, 'print'])->name('invoice.print');

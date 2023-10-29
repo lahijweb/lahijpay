@@ -1,0 +1,129 @@
+@font-face {
+    font-family: 'Vazirmatn';
+    src: url('fonts/vazirmatn/fonts/webfonts/Vazirmatn[wght].woff2') format('woff2 supports variations'),
+    url('fonts/vazirmatn/fonts/webfonts/Vazirmatn[wght].woff2') format('woff2-variations');
+    font-weight: 100 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+.btn-del {
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	border: 1px solid transparent;
+	border-radius: .25rem;
+	transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	color: #fff;
+	background-color: #dc3545;
+	border-color: #dc3545;
+	line-height: 1.2em;
+	cursor: pointer;
+}
+@media print {
+	.no-print, .no-print * {
+		display: none !important;
+	}
+
+	.print-border-0 {
+		border: 0;
+	}
+}
+@media print,screen {
+	.bold {
+		font-weight: bold;
+	}
+	body {
+		font-family: 'Vazirmatn';
+		direction: rtl;
+		text-align: right;
+		font-size: 13px;
+		margin: 0;
+	}
+	table {
+		border-collapse: collapse;
+		border-spacing: 0;
+		font-size: 14px;
+	}
+	th {
+		white-space: nowrap;
+		background-color: whitesmoke;
+		-webkit-print-color-adjust: exact;
+	}
+	td {
+		white-space: nowrap;
+	}
+	th,
+	td {
+		border: 1px solid #000;
+		padding: 1px 4px;
+	}
+	tr.pd td {
+		padding: 4px 8px;
+	}
+	tr.pd1 td {
+		padding: 3px 8px;
+	}
+	.bd-t0 {
+		border-top: 0 !important;
+	}
+	.bd-r0 {
+		border-right: 0 !important;
+	}
+	.bd-b0 {
+		border-bottom: 0 !important;
+	}
+	.bd-l0 {
+		border-left: 0 !important;
+	}
+	.bd-0 {
+		border: 0 !important;
+		max-width: 500px;
+		overflow-x: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+	}
+	.bd-address {
+		max-width: 745px !important;
+		padding-left: 30px;
+	}
+	.dr-ltr {
+		direction: ltr;
+	}
+	.text-center {
+		text-align: center
+	}
+	.text-left {
+		text-align: left;
+	}
+	.wd {
+		width: 100%;
+	}
+	.wd-1 {
+		width: 1px;
+	}
+	tr.rc {
+		font-size: 14px;
+	}
+	.fw-n {
+		font-weight: normal;
+		background-color: white !important;
+	}
+	.IsMinusFactor {
+		background-color: lightcoral;
+	}
+	.w1 {
+		width: 1px;
+	}
+	.dir_left {
+		/*direction: ltr;*/
+		text-align: left;
+	}
+	.pdd_left {
+		padding-left: 60px !important;
+	}
+	[contenteditable]:focus {
+		background-color: whitesmoke;
+		/*background: antiquewhite;*/
+	}
+}
