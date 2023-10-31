@@ -29,8 +29,6 @@ class OrderResource extends Resource
     protected static ?string $pluralLabel = 'سفارش‌ها';
     protected static ?string $modelLabel = 'سفارش‌';
     protected static ?string $navigationGroup = 'گزارش‌ها';
-    protected static ?int $navigationSort = 2;
-    protected static ?string $navigationIcon = 'heroicon-o-archive-box';
 
     public static function form(Form $form): Form
     {
@@ -82,24 +80,20 @@ class OrderResource extends Resource
                     ->toggleable()
                     ->limit(10)
                     ->label('محصول'),
-                TextColumn::make('first_name')
-                    ->searchable()
-                    ->toggleable()
-                    ->default('-')
-                    ->label('نام'),
                 TextColumn::make('last_name')
                     ->searchable()
                     ->toggleable()
                     ->default('-')
-                    ->label('نام خانوادگی'),
+                    ->formatStateUsing(fn($record) => $record->first_name.' '.$record->last_name)
+                    ->label('خریدار'),
                 TextColumn::make('email')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->default('-')
                     ->label('ایمیل'),
                 TextColumn::make('mobile')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->default('-')
                     ->label('موبایل'),
                 TextColumn::make('total_price')

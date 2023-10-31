@@ -32,9 +32,6 @@ class ProductResource extends Resource
     protected static ?string $pluralLabel = 'محصولات';
     protected static ?string $modelLabel = 'محصول';
     protected static ?string $navigationGroup = 'ابزارها';
-    protected static ?int $navigationSort = 2;
-
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -138,12 +135,12 @@ class ProductResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable('desc')
                     ->label('شناسه'),
                 TextColumn::make('sku')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('sku'),
                 TextColumn::make('slug')
                     ->searchable()
@@ -153,10 +150,11 @@ class ProductResource extends Resource
                 TextColumn::make('title')
                     ->searchable()
                     ->toggleable()
+                    ->limit(20)
                     ->label('عنوان'),
                 TextColumn::make('type')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('نوع'),
                 TextColumn::make('qty')
                     ->default('نامحدود')
@@ -202,9 +200,11 @@ class ProductResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\RestoreAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                    Tables\Actions\RestoreAction::make(),
+                ])
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

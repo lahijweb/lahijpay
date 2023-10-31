@@ -23,8 +23,6 @@ class GatewayResource extends Resource
     protected static ?string $pluralLabel = 'درگاه‌ها';
     protected static ?string $modelLabel = 'درگاه';
     protected static ?string $navigationGroup = 'تنظیمات';
-    protected static ?int $navigationSort = 3;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {

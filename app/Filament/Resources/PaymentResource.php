@@ -29,8 +29,6 @@ class PaymentResource extends Resource
     protected static ?string $pluralLabel = 'پرداخت‌ها';
     protected static ?string $modelLabel = 'پرداخت‌';
     protected static ?string $navigationGroup = 'گزارش‌ها';
-    protected static ?int $navigationSort = 1;
-    protected static ?string $navigationIcon = 'heroicon-o-banknotes';
 
     public static function form(Form $form): Form
     {
@@ -52,35 +50,31 @@ class PaymentResource extends Resource
                 TextColumn::make('uuid')
                     ->searchable()
                     ->limit(5)
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('UUID'),
                 TextColumn::make('payable_type')
                     ->toggleable()
                     ->default('-')
                     ->label('نوع'),
-                TextColumn::make('first_name')
-                    ->searchable()
-                    ->toggleable()
-                    ->default('-')
-                    ->label('نام'),
                 TextColumn::make('last_name')
                     ->searchable()
                     ->toggleable()
+                    ->formatStateUsing(fn($record) => $record->first_name.' '.$record->last_name)
                     ->default('-')
-                    ->label('نام خانوادگی'),
+                    ->label('پرداخت کننده'),
                 TextColumn::make('email')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->default('-')
                     ->label('ایمیل'),
                 TextColumn::make('mobile')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->default('-')
                     ->label('موبایل'),
                 TextColumn::make('gateway.name')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('درگاه'),
                 TextColumn::make('amount')
                     ->searchable()

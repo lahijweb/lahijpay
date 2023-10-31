@@ -26,10 +26,7 @@ class OrderStatusResource extends Resource
     protected static ?string $pluralLabel = 'وضعیت‌های سفارش';
     protected static ?string $modelLabel = 'وضعیت سفارش';
     protected static ?string $label = 'وضعیت‌های سفارش';
-    protected static ?string $icon = 'heroicon-o-rectangle-stack';
     protected static ?string $navigationGroup = 'تنظیمات';
-    protected static ?int $navigationSort = 3;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {

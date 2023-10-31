@@ -2,10 +2,10 @@
 
 namespace App\Providers\Filament;
 
-use Filament\FontProviders\GoogleFontProvider;
 use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages;
 use Filament\Panel;
 use Filament\PanelProvider;
@@ -32,6 +32,19 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->sidebarCollapsibleOnDesktop()
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label('گزارش‌ها')
+                    ->icon('heroicon-o-document-text'),
+                NavigationGroup::make()
+                    ->label('ابزارها')
+                    ->icon('heroicon-o-wrench-screwdriver')
+                    ->collapsed(),
+                NavigationGroup::make()
+                    ->label('تنظیمات')
+                    ->icon('heroicon-o-cog-6-tooth')
+                    ->collapsed()
+            ])
             ->colors([
                 'primary' => Color::Teal,
             ])

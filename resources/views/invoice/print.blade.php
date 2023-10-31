@@ -12,7 +12,7 @@
     <table style="width:100%;">
         <tbody>
             <tr>
-                <td colspan="11" class="dr-ltr text-right print-border-0" style="font-size: 20px; padding: 0px; background-color: whitesmoke; position: relative; border-left: none; border-right: none;border-top: none;">
+                <td colspan="11" class="dr-ltr text-right print-border-0" style="font-size: 20px; padding: 0px; background-color: whitesmoke; position: relative; border-left: none; border-right: none; border-top: none; border-bottom: 2px solid black;">
                     <table style="display: block;">
                         <tbody>
                         <tr>

@@ -23,6 +23,7 @@ use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
 class InvoiceResource extends Resource
@@ -31,8 +32,6 @@ class InvoiceResource extends Resource
     protected static ?string $modelLabel = 'فاکتور';
     protected static ?string $pluralLabel = 'فاکتورها';
     protected static ?string $navigationGroup = 'ابزارها';
-    protected static ?int $navigationSort = 3;
-    protected static ?string $navigationIcon = 'heroicon-o-rectangle-stack';
 
     public static function form(Form $form): Form
     {
@@ -141,7 +140,7 @@ class InvoiceResource extends Resource
                                 $data['total'] = $total + $total * ($data['tax'] / 100);
                                 return $data;
                             })
-                            ->itemLabel(fn (array $state): ?string => Product::find($state['product_id'])['title'] ?? null)
+                            ->itemLabel(fn(array $state): ?string => Product::find($state['product_id'])['title'] ?? null)
                             ->minItems(1)
                             ->reorderable()
                             ->reorderableWithButtons()
@@ -193,7 +192,7 @@ class InvoiceResource extends Resource
             ->columns([
                 TextColumn::make('id')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->sortable()
                     ->label('شناسه'),
                 TextColumn::make('invoice_no')
@@ -203,30 +202,25 @@ class InvoiceResource extends Resource
                     ->label('شماره فاکتور'),
                 TextColumn::make('uuid')
                     ->searchable()
-                    ->toggleable()
-                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('شناسه یکتا'),
                 TextColumn::make('customer.full_name')
                     ->searchable()
                     ->toggleable()
-                    ->sortable()
                     ->label('مشتری'),
                 TextColumn::make('total')
                     ->searchable()
                     ->toggleable()
                     ->money('IRR')
-                    ->sortable()
                     ->label('مبلغ'),
                 TextColumn::make('status')
                     ->searchable()
                     ->toggleable()
-                    ->sortable()
                     ->badge()
                     ->label('وضعیت'),
                 TextColumn::make('created_at')
                     ->jalaliDateTime()
-                    ->toggleable()
-                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->label('تاریخ ایجاد'),
             ])
             ->filters([
@@ -263,8 +257,10 @@ class InvoiceResource extends Resource
                     }),
             ])
             ->actions([
-                Tables\Actions\ViewAction::make(),
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make(),
+                    Tables\Actions\EditAction::make(),
+                ])
             ])
             ->bulkActions([
                 //
@@ -288,5 +284,12 @@ class InvoiceResource extends Resource
             'view' => Pages\ViewInvoice::route('/{record}'),
             'edit' => Pages\EditInvoice::route('/{record}/edit'),
         ];
+    }
+
+    public static function canEdit(Model $record): bool
+    {
+        if ($record->status === InvoiceStatusEnum::Paid)
+            return false;
+        return true;
     }
 }

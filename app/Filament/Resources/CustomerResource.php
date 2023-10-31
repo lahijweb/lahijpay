@@ -29,8 +29,6 @@ class CustomerResource extends Resource
     protected static ?string $pluralModelLabel = 'مشتریان';
     protected static ?string $pluralLabel = 'مشتریان';
     protected static ?string $navigationGroup = 'ابزارها';
-    protected static ?int $navigationSort = 4;
-    protected static ?string $navigationIcon = 'heroicon-o-user-group';
 
     public static function form(Form $form): Form
     {
@@ -131,12 +129,12 @@ class CustomerResource extends Resource
                     ->label('موبایل'),
                 TextColumn::make('phone')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->default('-')
                     ->label('تلفن'),
                 TextColumn::make('created_at')
                     ->searchable()
-                    ->toggleable()
+                    ->toggleable(isToggledHiddenByDefault: true)
                     ->jalaliDateTime()
                     ->label('تاریخ ایجاد'),
             ])
