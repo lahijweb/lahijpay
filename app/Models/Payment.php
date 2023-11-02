@@ -35,6 +35,6 @@ class Payment extends Model
 
     public function scopeAccepted($query)
     {
-        return $query->where('status', PaymentStatusEnum::Accepted);
+        return $query->where('status', PaymentStatusEnum::Paid);
     }
 }

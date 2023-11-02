@@ -33,7 +33,7 @@ class VerifyController extends Controller
                 ->transactionId($transaction_id)->verify();
             $referenceId = $receipt->getReferenceId();
             $transactionInfo->referenceid = $referenceId;
-            $transactionInfo->status = PaymentStatusEnum::Accepted;
+            $transactionInfo->status = PaymentStatusEnum::Paid;
             $transactionInfo->verified_at = now();
             $transactionInfo->save();
             if ($transactionInfo->payable_type == PayableTypeEnum::Order) {
@@ -53,7 +53,7 @@ class VerifyController extends Controller
             ];
             return Redirect::route('payment.callback')->with('message', $message);
         } catch (InvalidPaymentException $exception) {
-            $transactionInfo->status = PaymentStatusEnum::Rejected;
+            $transactionInfo->status = PaymentStatusEnum::Failed;
             $transactionInfo->save();
             $errorMessage = $exception->getMessage();
             $message = [

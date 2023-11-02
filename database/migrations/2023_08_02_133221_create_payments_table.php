@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('mobile')->nullable();
             $table->string('description')->nullable();
-            $table->enum('status', ['PENDING', 'ACCEPTED', 'REJECTED'])->default('PENDING');
+            $table->enum('status', ['pending', 'failed', 'paid'])->default('pending');
             $table->string('transactionid')->nullable();
             $table->string('referenceid')->nullable();
             $table->timestamp('verified_at')->nullable();

@@ -7,17 +7,17 @@ use Filament\Support\Contracts\HasLabel;
 
 enum PaymentStatusEnum: string implements HasLabel, HasColor
 {
-    case Pending = 'PENDING';
-    case Accepted = 'ACCEPTED';
-    case Rejected = 'REJECTED';
+    case Pending = 'pending';
+    case Failed = 'failed';
+    case Paid = 'paid';
 
 
     public function getLabel(): ?string
     {
         return match ($this) {
             self::Pending => 'در حال بررسی',
-            self::Accepted => 'تایید شده',
-            self::Rejected => 'رد شده',
+            self::Failed => 'ناموفق',
+            self::Paid => 'موفق',
         };
     }
 
@@ -25,8 +25,8 @@ enum PaymentStatusEnum: string implements HasLabel, HasColor
     {
         return match ($this) {
             self::Pending => 'gray',
-            self::Accepted => 'success',
-            self::Rejected => 'warning',
+            self::Failed => 'danger',
+            self::Paid => 'success',
         };
     }
 }

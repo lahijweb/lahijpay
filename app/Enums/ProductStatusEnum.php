@@ -27,8 +27,8 @@ enum ProductStatusEnum: string implements HasLabel, HasColor
     {
         return match ($this) {
             self::Draft => 'gray',
-            self::Published => 'green',
-            self::Unpublished => 'red',
+            self::Published => 'success',
+            self::Unpublished => 'danger',
             self::Archived => 'gray',
         };
     }
