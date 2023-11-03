@@ -28,7 +28,7 @@ class Address extends Model
 
     public function getFullAddressAttribute(): string
     {
-        return "{$this->province}, {$this->city}, {$this->address}";
+        return "{$this->province} - {$this->city} - {$this->address}";
     }
 
 }

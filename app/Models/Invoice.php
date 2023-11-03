@@ -59,4 +59,14 @@ class Invoice extends Model
         return $this->hasMany(InvoiceProduct::class);
     }
 
+    public function seller(): BelongsTo
+    {
+        return $this->belongsTo(InvoicePeople::class, 'seller_id');
+    }
+
+    public function buyer(): BelongsTo
+    {
+        return $this->belongsTo(InvoicePeople::class, 'buyer_id');
+    }
+
 }

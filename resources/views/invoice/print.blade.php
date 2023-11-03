@@ -36,17 +36,17 @@
                     <table style="width: 100%;">
                         <tbody>
                         <tr class="pd">
-                            <td class="bd-0" colspan="4" style="white-space: break-spaces;">نام شخص حقیقی / حقوقی: </td>
-                            <td class="bd-0" colspan="4">شماره اقتصادی: </td>
-                            <td class="bd-0" colspan="4">شناسه / کد ملی: </td>
+                            <td class="bd-0" colspan="4" style="white-space: break-spaces;">نام شخص حقیقی / حقوقی: {{ $invoice->seller->name }}</td>
+                            <td class="bd-0" colspan="4">شماره اقتصادی: {{ $invoice->seller->finance_no }}</td>
+                            <td class="bd-0" colspan="4">شناسه / کد ملی: {{ $invoice->seller->identity_no }}</td>
                         </tr>
                         <tr class="pd">
-                            <td class="bd-0" colspan="4">شماره ثبت: </td>
-                            <td class="bd-0" colspan="4">کدپستی: </td>
-                            <td class="bd-0" colspan="4">شماره تلفن: </td>
+                            <td class="bd-0" colspan="4">شماره ثبت: {{ $invoice->seller->register_no }}</td>
+                            <td class="bd-0" colspan="4">کدپستی: {{ $invoice->seller->zip }}</td>
+                            <td class="bd-0" colspan="4">شماره تلفن: {{ $invoice->seller->phone }}</td>
                         </tr>
                         <tr class="pd">
-                            <td class="bd-0" colspan="12" style="white-space: break-spaces;">نشانی: </td>
+                            <td class="bd-0" colspan="12" style="white-space: break-spaces;">نشانی: {{ $invoice->seller->address }}</td>
                         </tr>
                         </tbody>
                     </table>
@@ -60,17 +60,17 @@
                     <table style="width: 100%;">
                         <tbody>
                         <tr class="pd">
-                            <td class="bd-0" colspan="4" style="white-space: break-spaces;">نام شخص حقیقی / حقوقی: </td>
-                            <td class="bd-0" colspan="4">شماره اقتصادی: </td>
-                            <td class="bd-0" colspan="4">شناسه / کد ملی: </td>
+                            <td class="bd-0" colspan="4" style="white-space: break-spaces;">نام شخص حقیقی / حقوقی: {{ $invoice->buyer->name }}</td>
+                            <td class="bd-0" colspan="4">شماره اقتصادی: {{ $invoice->buyer->finance_no }}</td>
+                            <td class="bd-0" colspan="4">شناسه / کد ملی: {{ $invoice->buyer->identity_no }}</td>
                         </tr>
                         <tr class="pd">
-                            <td class="bd-0" colspan="4">شماره ثبت: </td>
-                            <td class="bd-0" colspan="4">کدپستی: </td>
-                            <td class="bd-0" colspan="4">شماره تلفن: </td>
+                            <td class="bd-0" colspan="4">شماره ثبت: {{ $invoice->buyer->register_no }}</td>
+                            <td class="bd-0" colspan="4">کدپستی: {{ $invoice->buyer->zip }}</td>
+                            <td class="bd-0" colspan="4">شماره تلفن: {{ $invoice->buyer->phone }}</td>
                         </tr>
                         <tr class="pd">
-                            <td class="bd-0" colspan="12" style="white-space: break-spaces;">نشانی: </td>
+                            <td class="bd-0" colspan="12" style="white-space: break-spaces;">نشانی: {{ $invoice->buyer->address }}</td>
                         </tr>
                         </tbody>
                     </table>

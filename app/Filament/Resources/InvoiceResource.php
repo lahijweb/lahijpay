@@ -2,10 +2,14 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\InvoicePeopleTypeEnum;
 use App\Enums\InvoiceStatusEnum;
 use App\Filament\Resources\InvoiceResource\Pages;
 use App\Filament\Resources\InvoiceResource\RelationManagers;
+use App\Models\Address;
+use App\Models\Customer;
 use App\Models\Invoice;
+use App\Models\InvoicePeople;
 use App\Models\Product;
 use Filament\Forms;
 use Filament\Forms\Components\DatePicker;
@@ -15,7 +19,9 @@ use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Set;
+use Filament\Forms\Get;
 use Filament\Forms\Components\Placeholder;
+use Filament\Forms\Components\Hidden;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
@@ -50,13 +56,89 @@ class InvoiceResource extends Resource
                             ->searchable()
                             ->preload()
                             ->placeholder('مشتری')
+                            ->live()
+                            ->afterStateUpdated(function (Set $set, ?string $state) {
+                                if ($state) {
+                                    $customer = Customer::find($state);
+                                    $set('buyer.name', $customer->full_name);
+                                    $set('buyer.identity_no', $customer->identity_no);
+                                    $set('buyer.register_no', $customer->register_no);
+                                    $set('buyer.finance_no', $customer->finance_no);
+                                    $set('buyer.phone', $customer->mobile);
+                                    $set('buyer.zip', null);
+                                    $set('buyer.address', null);
+                                    $set('address_id', null);
+                                }
+                            })
                             ->label('مشتری'),
+                        Select::make('address_id')
+                            ->options(function (Set $set, Get $get) {
+                                $customer = Customer::find($get('customer_id'));
+                                if ($customer)
+                                    return $customer->addresses->mapWithKeys(function ($address) {
+                                        return [
+                                            $address->id => $address->full_address
+                                        ];
+                                    });
+                                return [];
+                            })
+                            ->afterStateUpdated(function (Set $set, ?string $state) {
+                                if ($state) {
+                                    $address = Address::find($state);
+                                    $set('buyer.zip', $address->zip);
+                                    $set('buyer.address', $address->province . ' - ' . $address->city . ' - ' . $address->address);
+                                }
+                            })
+                            ->live()
+                            ->searchable()
+                            ->label('آدرس مشتری'),
+                        Select::make('seller_id')
+                            ->required()
+                            ->options(function () {
+                                return InvoicePeople::query()
+                                    ->where('type', InvoicePeopleTypeEnum::Seller)
+                                    ->get()
+                                    ->mapWithKeys(function ($customer) {
+                                        return [
+                                            $customer->id => $customer->name
+                                        ];
+                                    });
+                            })
+                            ->searchable()
+                            ->preload()
+                            ->placeholder('فروشنده')
+                            ->label('فروشنده'),
                         Select::make('status')
                             ->required()
                             ->options(InvoiceStatusEnum::class)
                             ->default(InvoiceStatusEnum::Draft)
                             ->label('وضعیت'),
-                    ])->columns(3),
+                    ])
+                    ->columns(3),
+                Section::make('خریدار')
+                    ->relationship('buyer')
+                    ->schema([
+                        Hidden::make('type')
+                            ->default(InvoicePeopleTypeEnum::Buyer),
+                        TextInput::make('name')
+                            ->required()
+                            ->label('نام خریدار'),
+                        TextInput::make('identity_no')
+                            ->label('شناسه / کد ملی'),
+                        TextInput::make('register_no')
+                            ->label('شماره ثبت'),
+                        TextInput::make('finance_no')
+                            ->label('شماره اقتصادی'),
+                        TextInput::make('phone')
+                            ->label('تلفن'),
+                        TextInput::make('zip')
+                            ->label('کد پستی'),
+                        TextInput::make('address')
+                            ->columnSpan(3)
+                            ->label('آدرس'),
+                    ])
+                    ->collapsible()
+                    ->columns(3),
                 Section::make()
                     ->schema([
                         Repeater::make('products')
