@@ -183,6 +183,11 @@ class OrderResource extends Resource
         ];
     }
 
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::paid()->count();
+    }
+
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist
