@@ -26,7 +26,7 @@
                                 </div>
                             </div>
                             <div class="text-center mt-3">
-                                <a class="link" href="#">مشاهده جزئیات فاکتور</a>
+                                <a class="link" href="{{ route('invoice.print', $invoice->uuid) }}" target="_blank">مشاهده جزئیات فاکتور</a>
                             </div>
                             <hr>
                             <div class="row mb-4">

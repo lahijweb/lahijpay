@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\InvoicePeopleTypeEnum;
 use App\Enums\InvoiceStatusEnum;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -61,7 +62,7 @@ class Invoice extends Model
 
     public function seller(): BelongsTo
     {
-        return $this->belongsTo(InvoicePeople::class, 'seller_id');
+        return $this->belongsTo(InvoicePeople::class, 'seller_id')->where('type', InvoicePeopleTypeEnum::Seller);
     }
 
     public function buyer(): BelongsTo

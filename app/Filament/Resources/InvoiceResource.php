@@ -22,6 +22,7 @@ use Filament\Forms\Set;
 use Filament\Forms\Get;
 use Filament\Forms\Components\Placeholder;
 use Filament\Forms\Components\Hidden;
+use Filament\Notifications\Notification;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Filters\Filter;
@@ -48,6 +49,7 @@ class InvoiceResource extends Resource
                         TextInput::make('invoice_no')
                             ->required()
                             ->unique(ignoreRecord: true)
+                            ->live(onBlur: true)
                             ->placeholder('شماره فاکتور')
                             ->label('شماره فاکتور'),
                         Select::make('customer_id')
@@ -57,6 +59,32 @@ class InvoiceResource extends Resource
                             ->preload()
                             ->placeholder('مشتری')
                             ->live()
+                            ->createOptionForm(function (Form $form) {
+                                return $form
+                                    ->schema([
+                                        TextInput::make('first_name')
+                                            ->required()
+                                            ->label('نام'),
+                                        TextInput::make('last_name')
+                                            ->required()
+                                            ->label('نام خانوادگی'),
+                                        TextInput::make('mobile')
+                                            ->label('موبایل'),
+                                        TextInput::make('phone')
+                                            ->label('تلفن'),
+                                        TextInput::make('email')
+                                            ->label('ایمیل'),
+                                        TextInput::make('identity_no')
+                                            ->label('شناسه / کد ملی'),
+                                        TextInput::make('register_no')
+                                            ->label('شماره ثبت'),
+                                        TextInput::make('finance_no')
+                                            ->label('شماره اقتصادی'),
+                                        TextInput::make('bussiness_name')
+                                            ->label('نام تجاری'),
+                                    ])
+                                    ->columns(3);
+                            })
                             ->afterStateUpdated(function (Set $set, ?string $state) {
                                 if ($state) {
                                     $customer = Customer::find($state);
@@ -89,30 +117,88 @@ class InvoiceResource extends Resource
                                     $set('buyer.address', $address->province . ' - ' . $address->city . ' - ' . $address->address);
                                 }
                             })
+                            ->createOptionUsing(function (Set $set, Get $get, array $data) {
+                                $customer = Customer::find($get('customer_id'));
+                                if ($customer) {
+                                    $address = $customer->addresses()->create([
+                                        'province' => $data['province'],
+                                        'city' => $data['city'],
+                                        'zip' => $data['zip'],
+                                        'address' => $data['address'],
+                                    ]);
+                                    $set('address_id', $address->id);
+                                    return $address->id;
+                                }
+                                Notification::make()
+                                    ->title('خطا')
+                                    ->body('مشتری یافت نشد! ابتدا مشتری را انتخاب کنید.')
+                                    ->danger()
+                                    ->send();
+                                return null;
+                            })
+                            ->createOptionForm(function (Form $form) {
+                                return $form
+                                    ->schema([
+                                        TextInput::make('province')
+                                            ->required()
+                                            ->label('استان'),
+                                        TextInput::make('city')
+                                            ->required()
+                                            ->label('شهر'),
+                                        TextInput::make('zip')
+                                            ->label('کد پستی'),
+                                        TextInput::make('address')
+                                            ->required()
+                                            ->columnSpan(3)
+                                            ->label('آدرس'),
+                                    ])
+                                    ->columns(3);
+                            })
                             ->live()
                             ->searchable()
                             ->label('آدرس مشتری'),
                         Select::make('seller_id')
                             ->required()
-                            ->options(function () {
-                                return InvoicePeople::query()
-                                    ->where('type', InvoicePeopleTypeEnum::Seller)
-                                    ->get()
-                                    ->mapWithKeys(function ($customer) {
-                                        return [
-                                            $customer->id => $customer->name
-                                        ];
-                                    });
-                            })
                             ->searchable()
                             ->preload()
                             ->placeholder('فروشنده')
+                            ->relationship('seller', 'name')
+                            ->getOptionLabelFromRecordUsing(fn(Model $record) => "{$record->id} - {$record->name}")
+                            ->createOptionForm(function (Form $form) {
+                                return $form
+                                    ->schema([
+                                        Hidden::make('type')
+                                            ->default(InvoicePeopleTypeEnum::Seller),
+                                        TextInput::make('name')
+                                            ->required()
+                                            ->label('نام فروشنده'),
+                                        TextInput::make('identity_no')
+                                            ->label('شناسه / کد ملی'),
+                                        TextInput::make('register_no')
+                                            ->label('شماره ثبت'),
+                                        TextInput::make('finance_no')
+                                            ->label('شماره اقتصادی'),
+                                        TextInput::make('phone')
+                                            ->label('تلفن'),
+                                        TextInput::make('zip')
+                                            ->label('کد پستی'),
+                                        TextInput::make('address')
+                                            ->columnSpan(3)
+                                            ->label('آدرس'),
+                                    ])
+                                    ->columns(3);
+                            })
                             ->label('فروشنده'),
                         Select::make('status')
                             ->required()
                             ->options(InvoiceStatusEnum::class)
                             ->default(InvoiceStatusEnum::Draft)
                             ->label('وضعیت'),
+                        Placeholder::make('uuid')
+                            ->content(fn(Invoice $record) => url('/invoice') . '/' . $record->uuid)
+                            ->columnSpan(3)
+                            ->hiddenOn(['create'])
+                            ->label('لینک پرداخت فاکتور'),
                     ])
                     ->columns(3),
                 Section::make('خریدار')
