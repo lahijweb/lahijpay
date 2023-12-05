@@ -343,6 +343,15 @@ class GatewaySeeder extends Seeder
                 'is_default' => false,
                 'is_active' => false,
             ],
+            [
+                'driver' => 'bitpay',
+                'name' => 'بیت پی',
+                'config' => [
+                    'api_token' => '',
+                ],
+                'is_default' => false,
+                'is_active' => false,
+            ],
         ];
 
         foreach ($drivers as $driver) {
