@@ -5,12 +5,16 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\AddressResource\Pages;
 use App\Filament\Resources\AddressResource\RelationManagers;
 use App\Models\Address;
+use App\Models\Customer;
 use Filament\Actions\ActionGroup;
 use Filament\Forms;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Form;
 use Filament\Forms\Components\Section;
-use Filament\Forms\Components\Select;
+use Filament\Forms\Components\MorphToSelect;
+use Filament\Forms\Components\Toggle;
+use Filament\Infolists\Components\Group;
+use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
@@ -34,12 +38,17 @@ class AddressResource extends Resource
             ->schema([
                 Section::make()
                     ->schema([
-                        Select::make('customer_id')
+                        MorphToSelect::make('related')
+                            ->types([
+                                MorphToSelect\Type::make(Customer::class)
+                                    ->label('مشتری')
+                                    ->titleAttribute('full_name'),
+                            ])
                             ->required()
                             ->searchable()
+                            ->columnSpanFull()
                             ->preload()
-                            ->relationship('customer', 'full_name')
-                            ->label('مشتری'),
+                            ->label('برای'),
                         TextInput::make('province')
                             ->required()
                             ->maxLength(255)
@@ -50,16 +59,21 @@ class AddressResource extends Resource
                             ->maxLength(255)
                             ->placeholder('شهر')
                             ->label('شهر'),
+                        TextInput::make('address')
+                            ->required()
+                            ->maxLength(255)
+                            ->placeholder('آدرس')
+                            ->label('آدرس'),
                         TextInput::make('zip')
                             ->maxLength(255)
                             ->placeholder('کد پستی')
                             ->label('کد پستی'),
-                        TextInput::make('address')
-                            ->required()
-                            ->maxLength(255)
-                            ->columnSpanFull()
-                            ->placeholder('آدرس')
-                            ->label('آدرس'),
+                        Toggle::make('is_active')
+                            ->default(true)
+                            ->label('فعال'),
+                        Toggle::make('is_default')
+                            ->default(true)
+                            ->label('پیش‌فرض'),
                     ])->columns(2)
             ]);
     }
@@ -73,10 +87,12 @@ class AddressResource extends Resource
                     ->toggleable()
                     ->sortable()
                     ->label('شناسه'),
-                TextColumn::make('customer.full_name')
-                    ->searchable()
+                TextColumn::make('related_type')
                     ->toggleable()
-                    ->label('مشتری'),
+                    ->label('نوع کاربر'),
+                TextColumn::make('full_name')
+                    ->toggleable()
+                    ->label('نام کاربر'),
                 TextColumn::make('province')
                     ->searchable()
                     ->toggleable()
@@ -88,13 +104,6 @@ class AddressResource extends Resource
             ])
             ->filters([
                 Tables\Filters\TrashedFilter::make(),
-                Tables\Filters\SelectFilter::make('customer')
-                    ->multiple()
-                    ->searchable()
-                    ->relationship('customer', 'full_name')
-                    ->preload()
-                    ->label('مشتری'),
-
             ])
             ->actions([
                 Tables\Actions\ActionGroup::make([
@@ -118,23 +127,55 @@ class AddressResource extends Resource
     {
         return $infolist
             ->schema([
-                InfolistSection::make('آدرس')
+                Group::make()
                     ->schema([
-                        TextEntry::make('customer.full_name')
-                            ->url(fn($record): string => CustomerResource::getUrl('view', [$record->customer_id]))
-                            ->label('مشتری'),
-                        TextEntry::make('province')
-                            ->label('استان'),
-                        TextEntry::make('city')
-                            ->label('شهر'),
-                        TextEntry::make('zip')
-                            ->default('-')
-                            ->label('کد پستی'),
-                        TextEntry::make('address')
-                            ->columnSpanFull()
-                            ->label('آدرس'),
-                    ])->columns(2)
-            ]);
+                        InfolistSection::make('آدرس')
+                            ->schema([
+                                TextEntry::make('province')
+                                    ->label('استان'),
+                                TextEntry::make('city')
+                                    ->label('شهر'),
+                                TextEntry::make('zip')
+                                    ->default('-')
+                                    ->label('کد پستی'),
+                                TextEntry::make('address')
+                                    ->columnSpanFull()
+                                    ->label('آدرس'),
+                            ])
+                            ->columns(2)
+                            ->columnSpan(['lg' => 2]),
+                        InfolistSection::make('کاربر')
+                            ->schema([
+                                TextEntry::make('related_type')
+                                    ->label('نوع کاربر'),
+                                TextEntry::make('related.id')
+                                    ->label('شناسه کاربر'),
+                                TextEntry::make('full_name')
+                                    ->label('نام کاربر'),
+                            ])
+                            ->columns(2)
+                            ->columnSpan(['lg' => 2]),
+                    ])
+                    ->columns(2)
+                    ->columnSpan(['lg' => 2]),
+                InfolistSection::make()
+                    ->schema([
+                        IconEntry::make('is_active')
+                            ->boolean()
+                            ->label('فعال'),
+                        IconEntry::make('is_default')
+                            ->boolean()
+                            ->label('پیش‌فرض'),
+                        TextEntry::make('created_at')
+                            ->jalaliDateTime()
+                            ->label('تاریخ ایجاد'),
+                        TextEntry::make('updated_at')
+                            ->jalaliDateTime()
+                            ->label('تاریخ ویرایش'),
+                    ])
+                    ->columnSpan(['lg' => 1]),
+
+            ])->columns(3);
     }
 
     public static function getRelations(): array
@@ -142,6 +183,11 @@ class AddressResource extends Resource
         return [
             //
         ];
+    }
+
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->with('related');
     }
 
     public static function getPages(): array
