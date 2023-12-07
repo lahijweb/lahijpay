@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Customer extends Model
@@ -33,8 +33,8 @@ class Customer extends Model
         'is_active' => 'boolean',
     ];
 
-    public function addresses(): HasMany
+    public function addresses(): MorphMany
     {
-        return $this->hasMany(Address::class);
+        return $this->morphMany(Address::class, 'related');
     }
 }

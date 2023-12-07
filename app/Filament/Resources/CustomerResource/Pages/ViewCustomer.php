@@ -17,4 +17,14 @@ class ViewCustomer extends ViewRecord
             Actions\DeleteAction::make(),
         ];
     }
+
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'مشخصات';
+    }
 }
