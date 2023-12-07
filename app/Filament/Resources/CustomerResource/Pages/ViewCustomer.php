@@ -13,8 +13,12 @@ class ViewCustomer extends ViewRecord
     protected function getHeaderActions(): array
     {
         return [
-            Actions\EditAction::make(),
-            Actions\DeleteAction::make(),
+            Actions\ActionGroup::make([
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
+            ])
+                ->button()
+                ->label('عملیات'),
         ];
     }
 

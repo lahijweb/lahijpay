@@ -13,6 +13,10 @@ use Filament\Forms\Form;
 use Filament\Forms\Components\Group;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Textarea;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\TextEntry;
+use Filament\Infolists\Components\Section as InfolistSection;
+use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
 use Filament\Tables;
 use Filament\Tables\Columns\TextColumn;
@@ -177,6 +181,63 @@ class CustomerResource extends Resource
             ])
             ->defaultSort('id', 'desc')
             ->emptyStateHeading('مشتریی یافت نشد!');
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                InfolistSection::make()
+                    ->schema([
+                        TextEntry::make('first_name')
+                            ->label('نام'),
+                        TextEntry::make('last_name')
+                            ->label('نام خانوادگی'),
+                        TextEntry::make('mobile')
+                            ->default('-')
+                            ->label('موبایل'),
+                        TextEntry::make('email')
+                            ->default('-')
+                            ->label('ایمیل'),
+                        TextEntry::make('phone')
+                            ->default('-')
+                            ->label('تلفن'),
+                        TextEntry::make('identity_no')
+                            ->default('-')
+                            ->label('کد/شناسه ملی'),
+                        TextEntry::make('register_no')
+                            ->default('-')
+                            ->label('شماره ثبت'),
+                        TextEntry::make('finance_no')
+                            ->default('-')
+                            ->label('شماره اقتصادی'),
+                        TextEntry::make('business_name')
+                            ->default('-')
+                            ->label('نام کسب‌وکار'),
+                        TextEntry::make('additional_Info')
+                            ->default('-')
+                            ->columnSpanFull()
+                            ->label('اطلاعات تکمیلی'),
+                    ])
+                    ->columnSpan(['lg' => 2])
+                    ->columns(2),
+                InfolistSection::make()
+                    ->schema([
+                        IconEntry::make('is_active')
+                            ->boolean()
+                            ->label('فعال'),
+                        IconEntry::make('is_business')
+                            ->boolean()
+                            ->label('شخص حقوقی'),
+                        TextEntry::make('created_at')
+                            ->jalaliDateTime()
+                            ->label('تاریخ ایجاد'),
+                        TextEntry::make('updated_at')
+                            ->jalaliDateTime()
+                            ->label('تاریخ ویرایش'),
+                    ])->columnSpan(['lg' => 1]),
+            ])->columns(3);
+
     }
 
     public static function getRelations(): array
