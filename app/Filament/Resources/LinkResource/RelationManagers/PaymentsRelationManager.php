@@ -22,6 +22,8 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class PaymentsRelationManager extends RelationManager
 {
     protected static string $relationship = 'payments';
+    protected static ?string $title = 'پرداخت‌ها';
+    protected static ?string $label = 'پرداخت';
 
     public function form(Form $form): Form
     {
@@ -120,15 +122,6 @@ class PaymentsRelationManager extends RelationManager
                                 fn(Builder $query, $date): Builder => $query->whereDate('created_at', '<=', $date),
                             );
                     }),
-            ])
-            ->headerActions([
-                //
-            ])
-            ->actions([
-                //
-            ])
-            ->bulkActions([
-                //
             ])
             ->recordUrl(
                 fn(Model $record): string => PaymentResource::getUrl('view', ['record' => $record]),

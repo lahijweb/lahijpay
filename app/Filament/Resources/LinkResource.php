@@ -12,6 +12,8 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Form;
 use Filament\Forms\Components\DateTimePicker;
+use Filament\Infolists\Components\IconEntry;
+use Filament\Infolists\Components\Section as InfolistSection;
 use Filament\Infolists\Components\TextEntry;
 use Filament\Infolists\Infolist;
 use Filament\Resources\Resource;
@@ -89,12 +91,14 @@ class LinkResource extends Resource
                                     ->label('زمانبندی')
                                     ->live(),
                                 DateTimePicker::make('start_date')
-                                    ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
+                                    ->visible(fn(Get $get): bool => $get('is_scheduled') === true)
+                                    ->jalali()
                                     ->required(fn(Get $get): bool => filled($get('is_scheduled')))
                                     ->placeholder('اعتبار لینک از تاریخ')
                                     ->label('اعتبار لینک از تاریخ'),
                                 DateTimePicker::make('end_date')
-                                    ->visible(fn(Get $get): bool => $get('is_scheduled'))->jalali()
+                                    ->visible(fn(Get $get): bool => $get('is_scheduled') === true)
+                                    ->jalali()
                                     ->required(fn(Get $get): bool => filled($get('is_scheduled')))
                                     ->placeholder('اعتبار لینک تا تاریخ')
                                     ->label('اعتبار لینک تا تاریخ'),
@@ -137,6 +141,56 @@ class LinkResource extends Resource
             ])
             ->defaultSort('id', 'desc')
             ->emptyStateHeading('لینکی یافت نشد!');
+    }
+
+    public static function infolist(Infolist $infolist): Infolist
+    {
+        return $infolist
+            ->schema([
+                InfolistSection::make()
+                    ->schema([
+                        TextEntry::make('title')
+                            ->label('عنوان'),
+                        TextEntry::make('slug')
+                            ->prefix(url('/') . '/link/')
+                            ->label('آدرس'),
+                        TextEntry::make('max_uses')
+                            ->default('نامحدود')
+                            ->label('حداکثر تعداد استفاده'),
+                        TextEntry::make('amount')
+                            ->default('ندارد')
+                            ->label('مبلغ ثابت'),
+                        TextEntry::make('description')
+                            ->default('-')
+                            ->columnSpanFull()
+                            ->label('توضیحات'),
+                    ])
+                    ->columnSpan(['lg' => 2])
+                    ->columns(2),
+                InfolistSection::make()
+                    ->schema([
+                        IconEntry::make('is_active')
+                            ->boolean()
+                            ->label('فعال'),
+                        IconEntry::make('is_scheduled')
+                            ->boolean()
+                            ->label('زمانبندی'),
+                        TextEntry::make('start_date')
+                            ->jalaliDateTime()
+                            ->hidden(fn(Model $record): bool => !$record->is_scheduled)
+                            ->label('اعتبار لینک از تاریخ'),
+                        TextEntry::make('end_date')
+                            ->jalaliDateTime()
+                            ->hidden(fn(Model $record): bool => !$record->is_scheduled)
+                            ->label('اعتبار لینک تا تاریخ'),
+                        TextEntry::make('created_at')
+                            ->jalaliDateTime()
+                            ->label('تاریخ ایجاد'),
+                        TextEntry::make('updated_at')
+                            ->jalaliDateTime()
+                            ->label('تاریخ ویرایش'),
+                    ])->columnSpan(['lg' => 1]),
+            ])->columns(3);
     }
 
     public static function getRelations(): array

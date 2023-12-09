@@ -17,4 +17,14 @@ class ViewLink extends ViewRecord
         ];
     }
 
+    public function hasCombinedRelationManagerTabsWithContent(): bool
+    {
+        return true;
+    }
+
+    public function getContentTabLabel(): ?string
+    {
+        return 'جزئیات';
+    }
+
 }
