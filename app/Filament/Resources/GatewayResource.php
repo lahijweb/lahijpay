@@ -42,7 +42,7 @@ class GatewayResource extends Resource
                                 ->editableKeys(false)
                                 ->columnSpanFull(),
                         ])
-                ])->columnSpan(2),
+                ])->columnSpan(['lg' => 2]),
                 Group::make()->schema([
                     Section::make()
                         ->schema([
@@ -51,7 +51,7 @@ class GatewayResource extends Resource
                             Toggle::make('is_active')
                                 ->label('فعال'),
                         ])->columns(1)
-                ])->columnSpan(1),
+                ])->columnSpan(['lg' => 1]),
             ])->columns(3);
     }
 
